@@ -47,11 +47,11 @@ export let cNode = cChainParams.current.Nodes[0];
 /** A mode which allows MPW to automatically select it's data sources */
 export let fAutoSwitch = true;
 /** The decimals to display for the wallet balance */
-export let nDisplayDecimals = 2;
+export let nDisplayDecimals = 8;
 /** A mode which configures MPW towards Advanced users, with low-level feature access and less restrictions (Potentially dangerous) */
 export let fAdvancedMode = false;
 /** automatically lock the wallet after any operation  that requires unlocking */
-export let fAutoLockWallet = false;
+export let fAutoLockWallet = true;
 
 let transparencyReport;
 
@@ -106,7 +106,7 @@ export class Settings {
         displayDecimals = nDisplayDecimals,
         advancedMode = false,
         coldAddress = '',
-        autoLockWallet = false,
+        autoLockWallet = true,
     } = {}) {
         this.analytics = analytics;
         this.explorer = explorer;
@@ -155,10 +155,10 @@ export let cAnalyticsLevel = arrAnalytics[2];
 export async function start() {
     //TRANSLATIONS
     //to make translations work we need to change it so that we just enable or disable the visibility of the text
-    doms.domTestnet.style.display = cChainParams.current.isTestnet
+    /*doms.domTestnet.style.display = cChainParams.current.isTestnet
         ? ''
         : 'none';
-    doms.domDebug.style.display = debug ? '' : 'none';
+    doms.domDebug.style.display = debug ? '' : 'none';*/
 
     // Hook up the 'currency' select UI
     document.getElementById('currency').onchange = function (evt) {
@@ -185,9 +185,9 @@ export async function start() {
     };
 
     // Hook up the 'analytics' select UI
-    document.getElementById('analytics').onchange = function (evt) {
+    /*document.getElementById('analytics').onchange = function (evt) {
         setAnalytics(arrAnalytics.find((a) => a.name === evt.target.value));
-    };
+    };*/
 
     await Promise.all([
         fillExplorerSelect(),
@@ -234,11 +234,11 @@ export async function start() {
     // Set any Toggles to their default or DB state
     // Network Auto-Switch
     fAutoSwitch = autoswitch;
-    doms.domAutoSwitchToggle.checked = fAutoSwitch;
+    //doms.domAutoSwitchToggle.checked = fAutoSwitch;
 
     // Advanced Mode
     fAdvancedMode = advancedMode;
-    doms.domAdvancedModeToggler.checked = fAdvancedMode;
+    //doms.domAdvancedModeToggler.checked = fAdvancedMode;
     await configureAdvancedMode();
 
     // Set the display currency
@@ -267,10 +267,10 @@ export async function start() {
     ];
 
     // Initialise status icons as their default variables
-    doms.domNetwork.innerHTML =
+    /*doms.domNetwork.innerHTML =
         '<i class="fa-solid fa-' +
         (getNetwork().enabled ? 'wifi' : 'ban') +
-        '"></i>';
+        '"></i>';*/
 
     // Honour the "Do Not Track" header by default
     if (!strSettingAnalytics && navigator.doNotTrack === '1') {
@@ -430,13 +430,13 @@ async function fillCurrencySelect(mapCurrencies) {
  */
 export function fillAnalyticSelect() {
     const domAnalyticsSelect = document.getElementById('analytics');
-    domAnalyticsSelect.innerHTML = '';
+    //domAnalyticsSelect.innerHTML = '';
     for (const analLevel of arrAnalytics) {
         const opt = document.createElement('option');
         // Apply translation to the display HTML
         opt.value = analLevel.name;
         opt.innerHTML = translation['analytic' + analLevel.name];
-        domAnalyticsSelect.appendChild(opt);
+        //domAnalyticsSelect.appendChild(opt);
     }
 }
 
@@ -464,12 +464,12 @@ async function setAnalytics(level, fSilent = false) {
     }
 
     // Set display + notify if allowed
-    doms.domAnalyticsDescriptor.innerHTML =
+    /*doms.domAnalyticsDescriptor.innerHTML =
         cAnalyticsLevel.name === arrAnalytics[0].name
             ? ''
             : '<h6 style="color:#dcdf6b;font-family:mono !important;"><pre style="color: inherit;">' +
               strDesc +
-              '</pre></h6>';
+              '</pre></h6>';*/
     if (!fSilent)
         createAlert(
             'success',
@@ -478,6 +478,10 @@ async function setAnalytics(level, fSilent = false) {
             ]),
             2250
         );
+}
+
+export async function isConnected() {
+    return wallet.isSynced;
 }
 
 /**
@@ -616,34 +620,7 @@ async function fillExplorerSelect() {
 }
 
 async function fillNodeSelect() {
-    cNode = cChainParams.current.Nodes[0];
-
-    while (doms.domNodeSelect.options.length > 0) {
-        doms.domNodeSelect.remove(0);
-    }
-
-    // Add each trusted node into the UI selector
-    for (const node of cChainParams.current.Nodes) {
-        const opt = document.createElement('option');
-        opt.value = node.url;
-        opt.innerHTML =
-            node.name + ' (' + node.url.replace('https://', '') + ')';
-        doms.domNodeSelect.appendChild(opt);
-    }
-
-    // Fetch settings from Database
-    const database = await Database.getInstance();
-    const { node: strSettingNode } = await database.getSettings();
-
-    // For any that exist: load them, or use the defaults
-    setNode(
-        cChainParams.current.Nodes.find((a) => a.url === strSettingNode) ||
-            cNode,
-        true
-    );
-
-    // And update the UI to reflect them
-    doms.domNodeSelect.value = cNode.url;
+    
 }
 
 /**

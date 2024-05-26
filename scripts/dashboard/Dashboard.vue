@@ -108,7 +108,7 @@ async function importWallet({ type, secret, password = '' }) {
 
         // Start syncing in the background
         wallet.sync().then(() => {
-            createAlert('success', translation.syncStatusFinished, 12500);
+            //createAlert('success', translation.syncStatusFinished, 12500);
         });
         getEventEmitter().emit('wallet-import');
         return true;
@@ -192,6 +192,23 @@ async function displayLockWalletModal() {
 function lockWallet() {
     wallet.wipePrivateData();
     createAlert('success', ALERTS.WALLET_LOCKED, 1500);
+}
+
+let signedTx;
+const txRibbitPerByte = ref(0);
+const txFee = ref(0);
+const txSize = ref(0);
+const txAmount = ref(0);
+const txSender = ref('');
+const txDestination = ref('');
+
+function roundToDecimalPlace(number, decimalPlaces) {
+    if (typeof number !== 'number' || typeof decimalPlaces !== 'number') {
+        throw new TypeError('Both arguments must be numbers');
+    }
+
+    const factor = Math.pow(10, decimalPlaces);
+    return Math.round(number * factor) / factor;
 }
 
 /**
@@ -325,9 +342,32 @@ async function send(address, amount, useShieldInputs) {
 
     // Create and send the TX
     try {
-        await wallet.createAndSendTransaction(getNetwork(), address, nValue, {
+        /*await wallet.createAndSendTransaction(getNetwork(), address, nValue, {
+            useShieldInputs,
+        });*/
+
+
+        var txEx = await wallet.createTransaction(address, nValue, {
             useShieldInputs,
         });
+
+
+        var feeToPay = Number(txEx.tb.valueIn - txEx.tb.valueOut);
+        var size = Number(txEx.tx.serialize().length / 2);
+        var ribbitsPerByte = Number(feeToPay / size);
+
+        txRibbitPerByte.value = roundToDecimalPlace(ribbitsPerByte, 2);
+        txAmount.value = nValue / COIN;
+        txFee.value = feeToPay;
+        txSize.value = size;
+        txSender.value = wallet.getAddress();
+        txDestination.value = address;
+        signedTx = txEx.tx;
+
+        startTimer(5); // Start the timer for 5 seconds
+        $('#sendConfirmationModal').modal('show');
+        
+
     } catch (e) {
         console.error(e);
         createAlert('warning', e);
@@ -383,6 +423,20 @@ onMounted(async () => {
         }
     }
     updateLogOutButton();
+
+    //test
+    //$('#sendConfirmationModal').modal('show');
+
+    const button = document.getElementById("sendConfirmButton");
+    
+    button.addEventListener("click", async function() {
+        try {
+            await sendConfirm();
+        } catch (error) {
+            console.error("Error occurred while sending confirm:", error);
+        }
+    });
+
 });
 
 const {
@@ -457,18 +511,83 @@ defineExpose({
     restoreWallet,
     changePassword,
 });
+
+
+async function sendConfirm() {
+    //console.log('sendConfirm');
+    try {
+        
+
+
+if (wallet.isViewOnly && !wallet.isHardwareWallet) {
+        if (
+            !(await restoreWallet(
+                tr(ALERTS.WALLET_UNLOCK_IMPORT, [
+                    {
+                        unlock: wallet.isEncrypted
+                            ? 'unlock '
+                            : 'import/create',
+                    },
+                ])
+            ))
+        )
+            return;
+    }
+
+        var result = await wallet.sendTransaction(getNetwork(), signedTx);
+
+        
+    } catch (e) {
+        console.error(e);
+        createAlert('warning', e);
+    } finally {
+        if (autoLockWallet.value) {
+            if (wallet.isEncrypted) {
+                lockWallet();
+            } else {
+                await displayLockWalletModal();
+            }
+        }
+    }
+}
+
+let timerStarted = false;
+
+  // Function to start the timer
+  function startTimer(duration) {
+      if(timerStarted) return;
+      timerStarted = true;
+      var timer = duration, seconds;
+      var confirmButton = document.getElementById("sendConfirmButton");
+      confirmButton.disabled = true;
+      --timer;
+      var interval = setInterval(function () {
+          seconds = parseInt(timer % 60, 10);
+          confirmButton.innerText = "Confirm (" + seconds + ")";
+          if (--timer < 0) {
+              clearInterval(interval);
+              confirmButton.innerText = "Confirm";
+              confirmButton.disabled = false; // Enable the button after the timer ends
+              timerStarted = false;
+          }else{
+            confirmButton.disabled = true; // Disable the button
+          }
+      }, 1000);
+  }
+
+
 </script>
 
 <template>
-    <div id="keypair" class="tabcontent">
-        <div class="row m-0">
-            <Login
+    <div id="keypair" class="tabcontent m-0">
+        <div class="m-0 p-0">
+            <Login class="m-0 p-0"
                 v-show="!wallet.isImported"
                 :advancedMode="advancedMode"
                 @import-wallet="importWallet"
             />
 
-            <br />
+           
 
             <!-- Unlock wallet -->
             <div
@@ -545,7 +664,7 @@ defineExpose({
             <!-- // Lock Wallet -->
 
             <!-- Redeem Code (PIVX Promos) -->
-            <div
+            <!--<div
                 class="modal"
                 id="redeemCodeModal"
                 tabindex="-1"
@@ -810,7 +929,7 @@ defineExpose({
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <!-- // Redeem Code (PIVX Promos) -->
 
             <!-- Contacts Modal -->
@@ -835,7 +954,7 @@ defineExpose({
                                 style="
                                     text-align: center;
                                     width: 100%;
-                                    color: #d5adff;
+                                    color: #000;
                                 "
                             >
                                 {{ translation.contacts }}
@@ -892,11 +1011,11 @@ defineExpose({
                         :shieldEnabled="wallet.hasShield"
                         @send="showTransferMenu = true"
                         @exportPrivKeyOpen="showExportModal = true"
-                        class="col-12 p-0 mb-5"
+                        class="col-12 p-0 mb-0"
                     />
                     <Activity
                         ref="activity"
-                        class="col-12 mb-5"
+                        class="col-12 mb-0"
                         title="Activity"
                         :rewards="false"
                     />
@@ -923,4 +1042,118 @@ defineExpose({
         @close="showRestoreWallet = false"
         @import="importWif"
     />
+
+<!-- Modal for confirmation -->
+<!--<div class="modal fade" id="sendConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-white" id="confirmationModalLabel">Confirmation Required</h5>
+        <button type="button" class="close" id="closeModalButton" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body m-0">
+        <p>Please confirm the transaction details.</p>
+        <p>From: {{ txSender }}</p>
+        <p>To: {{ txDestination }}</p>
+        <p>Will Receive: {{ txAmount }}</p>
+        <p>Blockchain Fees (Deducted from your balance): {{ txFee / 100000000 }} PEPE ({{ txRibbitPerByte }} ribbits/Byte)</p>
+        <p>TX Size: {{ txSize }} Byte</p>
+      </div>
+      <div class="modal-footer" hidden="">
+        <button id="confirmButton" type="button" aria-label="Close" class="pivx-button-big" style="color: rgb(255, 255, 255); float: right; opacity: 0.8;">Confirm (5)</button>
+        <button id="cancelButton" type="button" aria-label="Close" class="pivx-button-big" style="color: rgb(255, 255, 255); float: right; opacity: 0.8;">Close</button>
+      </div>
+    </div>
+  </div>
+</div>-->
+
+<!-- Modal for confirmation -->
+<div
+                class="modal"
+                id="sendConfirmationModal"
+                tabindex="-1"
+                role="dialog"
+                aria-hidden="true"
+                data-backdrop="static"
+                data-keyboard="false"
+            >
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header pb-0 pt-0">
+        <h5 class="modal-title text-white" id="confirmationModalLabel">Confirm Transaction</h5>
+        <!--<button type="button" class="close" id="closeModalButton" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>-->
+      </div>
+      <div class="modal-body p-2">
+        <p style="color: #fff"><b>Please confirm the transaction details:</b></p>
+        <table class="table table-bordered m-0 p-0">
+          <tbody>
+            <tr>
+              <th scope="row">From:</th>
+              <td>{{ txSender }}</td>
+            </tr>
+            <tr>
+              <th scope="row">To:</th>
+              <td>{{ txDestination }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Amount:</th>
+              <td>{{ txAmount }}</td>
+            </tr>
+            <tr>
+              <th scope="row">*Fees:</th>
+              <td>{{ txFee / 100000000 }} PEPE ({{ txRibbitPerByte }} ribbits/Byte)</td>
+            </tr>
+            <tr>
+              <th scope="row">TX Size:</th>
+              <td>{{ txSize }} Byte</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="color: #fff; font-size: 12px" class="m-1 p-0"><u>*Fees are deducted from your balance. The recipient receive the amount specified.*</u></p>
+      </div>
+      <div class="modal-footer m-0 p-0" hidden="">
+        <button id="sendConfirmButton" type="button" aria-label="Close" class="pivx-button-big" style="color: rgb(255, 255, 255); float: right; opacity: 0.8;" data-dismiss="modal">Confirm (5)</button>
+        <button
+                                type="button"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                                class="pivx-button-big"
+                                data-i18n="popupClose"
+                                style="color: #fff; float: right; opacity: 0.8"
+                            >
+                                Close
+                            </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 </template>
+<style>
+    #sendConfirmationModal > div > div > div.modal-body > table
+    {
+        border: 1px solid #222222c7;
+    }
+    #sendConfirmationModal > div > div > div.modal-body > table > tbody > tr
+    {
+        border-color: #222222c7;
+    }
+    #sendConfirmationModal > div > div > div.modal-body > table > tbody > tr > td
+    {
+        background-color: #444444c7;
+        border-color: #222222c7;
+        color: #000;
+    }
+    #sendConfirmationModal > div > div > div.modal-body > table > tbody > tr > th
+    {
+        background-color: #444444c7;
+        border-color: #222222c7;
+        color: #000;
+    }
+</style>

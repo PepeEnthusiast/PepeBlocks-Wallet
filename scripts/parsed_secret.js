@@ -36,14 +36,14 @@ export class ParsedSecret {
                 test: (s) => isBase64(s) && s.length >= 128,
                 f: async (s, p) => ParsedSecret.parse(await decrypt(s, p)),
             },
-            {
+            /*{
                 test: (s) => s.startsWith('xprv'),
                 f: (s) => new ParsedSecret(new HdMasterKey({ xpriv: s })),
             },
             {
                 test: (s) => s.startsWith('xpub'),
                 f: (s) => new ParsedSecret(new HdMasterKey({ xpub: s })),
-            },
+            },*/
             {
                 test: (s) =>
                     cChainParams.current.PUBKEY_PREFIX.includes(s[0]) &&
@@ -54,7 +54,7 @@ export class ParsedSecret {
                 test: (s) => verifyWIF(s),
                 f: (s) => ParsedSecret.parse(parseWIF(s)),
             },
-            {
+            /*{
                 test: (s) => s.includes(' '),
                 f: async (s) => {
                     const { ok, msg, phrase } = await cleanAndVerifySeedPhrase(
@@ -80,7 +80,7 @@ export class ParsedSecret {
                         pivxShield
                     );
                 },
-            },
+            },*/
             {
                 test: (s) => {
                     try {

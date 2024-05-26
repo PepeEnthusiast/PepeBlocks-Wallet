@@ -5,7 +5,7 @@ import { ref, computed, toRefs, onMounted, watch } from 'vue';
 import { beautifyNumber } from '../misc';
 import { getEventEmitter } from '../event_bus';
 import * as jdenticon from 'jdenticon';
-import { optimiseCurrencyLocale, openExplorer } from '../global';
+import { optimiseCurrencyLocale, openExplorer, openExplorerSecondary } from '../global';
 import { renderWalletBreakdown } from '../charting.js';
 import {
     guiRenderCurrentReceiveModal,
@@ -162,7 +162,7 @@ getEventEmitter().on(
                                     class="dropdown-menu"
                                     aria-labelledby="dropdownMenuButton"
                                 >
-                                    <a
+                                    <!--<a
                                         class="dropdown-item ptr"
                                         @click="renderWalletBreakdown()"
                                         data-toggle="modal"
@@ -174,7 +174,7 @@ getEventEmitter().on(
                                                 translation.balanceBreakdown
                                             }}</span
                                         >
-                                    </a>
+                                    </a>-->
                                     <a
                                         class="dropdown-item ptr"
                                         @click="openExplorer()"
@@ -185,6 +185,20 @@ getEventEmitter().on(
                                         <span
                                             >&nbsp;{{
                                                 translation.viewOnExplorer
+                                            }}</span
+                                        >
+                                    </a>
+                                    <a
+                                        class="dropdown-item ptr"
+                                        v-if="!isHdWallet"
+                                        @click="openExplorerSecondary()"
+                                    >
+                                        <i
+                                            class="fa-solid fa-magnifying-glass"
+                                        ></i>
+                                        <span
+                                            >&nbsp;{{
+                                                translation.viewOnExplorerSecondary
                                             }}</span
                                         >
                                     </a>
@@ -257,7 +271,7 @@ getEventEmitter().on(
                                             }}</span
                                         >
                                     </a>
-                                    <a
+                                    <!--<a
                                         class="dropdown-item ptr"
                                         data-toggle="modal"
                                         data-target="#redeemCodeModal"
@@ -268,7 +282,7 @@ getEventEmitter().on(
                                                 translation.redeemOrCreateCode
                                             }}</span
                                         >
-                                    </a>
+                                    </a>-->
                                 </div>
                             </div>
                         </div>
@@ -282,8 +296,8 @@ getEventEmitter().on(
                 width="65"
                 height="65"
                 style="width: 65px; height: 65px"
-            ></canvas
-            ><br />
+            ></canvas>
+            <br />
             <span
                 class="ptr"
                 @click="renderWalletBreakdown()"

@@ -95,6 +95,9 @@ function submit() {
                 </button>
             </template>
             <template #body>
+                <p style="font-size:16px">To save this wallet you must choose an encryption password.</p>
+                <p style="font-size:16px">If you don't, <span style="font-size:18px; color: #ff0000; background-color: #000"><b><u>it will be lost</u></b></span> upon leaving this page.</p>
+                <p class="important" style="font-size:18px; color: #ff0000; background-color: #000"><b><u>Regardless, backup your private key immediately!</u></b></p>
                 <div class="row m-0">
                     <input
                         class="center-text textboxTransparency"

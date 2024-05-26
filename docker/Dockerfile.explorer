@@ -8,7 +8,7 @@ ENV GOPATH=/explorer/go
 WORKDIR src
 RUN git clone https://github.com/DeanSparrow/PIVX-BlockExplorer.git
 WORKDIR PIVX-BlockExplorer
-COPY docker/blockchainconfig.json .
+COPY blockchainconfig.json .
 RUN go mod init || echo
 RUN go mod tidy || echo
 RUN go build || echo

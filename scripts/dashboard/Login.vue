@@ -15,8 +15,8 @@ const { advancedMode } = toRefs(props);
 </script>
 
 <template>
-    <div class="row m-0">
-        <CreateWallet
+    <div class="row m-0 p-0">
+        <!--<CreateWallet
             :advanced-mode="advancedMode"
             @import-wallet="
                 (mnemonic, password) =>
@@ -28,7 +28,7 @@ const { advancedMode } = toRefs(props);
             "
         />
 
-        <br />
+        <br />-->
 
         <VanityGen
             @import-wallet="
@@ -37,7 +37,7 @@ const { advancedMode } = toRefs(props);
         />
 
         <!-- ACCESS LEDGER HARDWARE WALLET -->
-        <div class="col-12 col-lg-6 p-2">
+        <!--<div class="col-12 col-lg-6 p-2">
             <div
                 id="generateHardwareWallet"
                 class="h-100 dashboard-item dashboard-display"
@@ -73,7 +73,7 @@ const { advancedMode } = toRefs(props);
             </div>
         </div>
 
-        <br />
+        <br />-->
         <AccessWallet
             :advancedMode="advancedMode"
             @import-wallet="

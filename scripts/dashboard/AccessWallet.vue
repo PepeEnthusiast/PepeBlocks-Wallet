@@ -26,7 +26,7 @@ const secret = ref('');
  */
 const password = ref('');
 
-watch([secret, advancedMode], ([secret, advancedMode]) => {
+/*watch([secret, advancedMode], ([secret, advancedMode]) => {
     // If it cointains spaces, it's likely a bip39 seed
     const fContainsSpaces = secret.trim().includes(' ');
 
@@ -47,11 +47,13 @@ watch([secret, advancedMode], ([secret, advancedMode]) => {
     passwordPlaceholder.value = fContainsSpaces
         ? translation.optionalPassphrase
         : translation.password;
-});
+});*/
+
 watch(showPassword, (showPassword) => {
     // Empty password prompt when hidden
     if (!showPassword) password.value = '';
 });
+
 const emit = defineEmits(['import-wallet']);
 function importWallet() {
     emit('import-wallet', secret.value, password.value);
@@ -64,8 +66,7 @@ function importWallet() {
 <template>
     <div class="col-12 col-lg-6 p-2">
         <div
-            class="h-100 dashboard-item dashboard-display"
-            style="margin-bottom: 100px"
+            class="h-100 w-100 dashboard-item dashboard-display"
         >
             <div class="container">
                 <div class="coinstat-icon" v-html="coinPlant"></div>
@@ -86,7 +87,7 @@ function importWallet() {
                     <input
                         v-model="secret"
                         :type="cloakSecret ? 'password' : 'text'"
-                        placeholder="Seed Phrase, XPriv or WIF Private Key"
+                        placeholder="Private Key"
                         data-testid="secretInp"
                     />
                     <input

@@ -335,7 +335,8 @@ async function renderContactModal() {
         let strPubkey = '';
 
         // If HD: use xpub, otherwise we'll fallback to our single address
-        strPubkey = await wallet.getKeyToExport();
+        //strPubkey = await wallet.getKeyToExport();
+        strPubkey = wallet.getCurrentAddress()
 
         // Construct the Contact Share URI
         const strContactURI = await localContactToURI(cAccount, strPubkey);
@@ -388,7 +389,7 @@ async function renderContactModal() {
 
 function renderAddress(strAddress) {
     try {
-        createQR('pivx:' + strAddress, doms.domModalQR);
+        createQR(/*'pepecoin:' + */strAddress, doms.domModalQR);
         doms.domModalQR.firstChild.style.width = '100%';
         doms.domModalQR.firstChild.style.height = 'auto';
         doms.domModalQR.firstChild.classList.add('no-antialias');
@@ -887,13 +888,13 @@ export async function guiRemoveContact(index) {
             { strName: sanitizeHTML(cContact.label) },
         ]),
         html: `
-            <p>
+            <p><b>
                 ${tr(translation.removeContactSubtext, [
                     { strName: sanitizeHTML(cContact.label) },
                 ])}
+                </b><br>
                 <br>
-                <br>
-                <i style="opacity: 0.65">${translation.removeContactNote}</i>
+                <i style="opacity: 0.85">${translation.removeContactNote}</i>
             </p>
         `,
     });
@@ -1001,7 +1002,8 @@ export async function localContactToURI(account, pubkey) {
     let strPubkey = pubkey || '';
 
     // If HD: use xpub, otherwise we'll fallback to our single address
-    if (!strPubkey) strPubkey = await wallet.getKeyToExport();
+    //if (!strPubkey) strPubkey = await wallet.getKeyToExport();
+    if (!strPubkey) strPubkey = await wallet.getCurrentAddress();
 
     // Construct the Contact URI Root
     const strURL = window.location.origin + window.location.pathname;

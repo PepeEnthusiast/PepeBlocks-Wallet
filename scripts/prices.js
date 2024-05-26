@@ -13,7 +13,7 @@ import { sleep } from './utils.js';
  *
  * @todo Allow an array of Oracle instances for better privacy and decentralisation
  */
-export const ORACLE_BASE = 'https://pivxla.bz/oracle/api/v1';
+export const ORACLE_BASE = 'https://pepeblocks.com/ext';
 
 /**
  * An Oracle instance
@@ -57,24 +57,46 @@ export class Oracle {
      */
     async getPrice(strCurrency) {
         try {
-            const cReq = await fetch(`${ORACLE_BASE}/price/${strCurrency}`);
+
+
+            //getcurrentprice
+
+            const cReq = await fetch(`${ORACLE_BASE}/getcurrentprice`);
+
+            // If the request fails, we'll try to fallback to cache, otherwise return a safe empty state
+            if (!cReq.ok) {
+                //console.log(cReq);
+                return this.getCachedPrice(strCurrency);
+            }
+
+            var cCurrency = await cReq.json();
+
+            cCurrency = { "currency": "usd", "value": cCurrency.last_price_usdt }
+
+            //console.log(JSON.stringify(cCurrency))
+
+            // Update it
+            this.mapCurrencies.set(strCurrency, cCurrency);
+
+            return cCurrency.value;
+
+            /*const cReq = await fetch(`${ORACLE_BASE}/price/${strCurrency}`);
 
             // If the request fails, we'll try to fallback to cache, otherwise return a safe empty state
             if (!cReq.ok) return this.getCachedPrice(strCurrency);
 
-            /** @type {Currency} */
             const cCurrency = await cReq.json();
 
             // Update it
             this.mapCurrencies.set(strCurrency, cCurrency);
 
             // And finally return it
-            return cCurrency.value;
+            return cCurrency.value;*/
         } catch (e) {
             console.warn(
                 'Oracle: Failed to fetch ' +
-                    strCurrency.toUpperCase() +
-                    ' price!'
+                strCurrency.toUpperCase() +
+                ' price!'
             );
             console.warn(e);
             return this.getCachedPrice(strCurrency);
@@ -91,13 +113,10 @@ export class Oracle {
      */
     async getCurrencies() {
         try {
-            const cReq = await fetch(`${ORACLE_BASE}/currencies`);
 
-            // If the request fails, we'll try to fallback to cache, otherwise return a safe empty state
-            if (!cReq.ok) return this.getCachedCurrencies();
+            //return [{"currency":"btc","value":0.00000512,"last_updated":1716332139}];
 
-            /** @type {Array<Currency>} */
-            const arrCurrencies = await cReq.json();
+            const arrCurrencies = [{ "currency": "usd", "value": 0, "last_updated": 0 }];
 
             // Loop each currency and update the cache
             for (const cCurrency of arrCurrencies) {
@@ -107,6 +126,28 @@ export class Oracle {
             // Now we've loaded all currencies: we'll flag it and use the lower bandwidth price fetches in the future
             this.#fLoadedCurrencies = true;
             return arrCurrencies;
+
+
+
+
+            /*const cReq = await fetch(`${ORACLE_BASE}/currencies`);
+
+            // If the request fails, we'll try to fallback to cache, otherwise return a safe empty state
+            if (!cReq.ok) return this.getCachedCurrencies();
+
+            const arrCurrencies = await cReq.json();
+
+            console.log(JSON.stringify(arrCurrencies));
+
+            // Loop each currency and update the cache
+            for (const cCurrency of arrCurrencies) {
+                this.mapCurrencies.set(cCurrency.currency, cCurrency);
+            }
+
+            // Now we've loaded all currencies: we'll flag it and use the lower bandwidth price fetches in the future
+            this.#fLoadedCurrencies = true;
+            return arrCurrencies;*/
+
         } catch (e) {
             console.warn('Oracle: Failed to fetch currencies!');
             console.warn(e);

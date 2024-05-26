@@ -52,7 +52,7 @@ defineEmits(['close']);
     min-height: 155px;
     transition: 0.4s;
     /*background-color:rgba(255, 255, 255, 12%)!important;*/
-    background-color: #5d2f83c9;
+    background-color: #55883a;
 
     font-size: 15px;
 }

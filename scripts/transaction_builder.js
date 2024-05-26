@@ -14,7 +14,7 @@ export class TransactionBuilder {
 
     // Part of the tx fee that has been already handled
     #handledFee = 0;
-    MIN_FEE_PER_BYTE = 10;
+    MIN_FEE_PER_BYTE = 1000;
     // This number is larger or equal than the max size of the script sig for a P2CS and P2PKH transaction
     SCRIPT_SIG_MAX_SIZE = 108;
 
@@ -51,6 +51,26 @@ export class TransactionBuilder {
     static create() {
         return new TransactionBuilder();
     }
+
+    /*getSize() {
+        
+        //TODO: find a cleaner way to add the dummy signature
+        let scriptSig = [];
+        for (let vin of this.#transaction.vin) {
+            scriptSig.push(vin.scriptSig);
+            // Insert a dummy signature just to compute fees
+            vin.scriptSig = bytesToHex(Array(this.SCRIPT_SIG_MAX_SIZE).fill(0));
+        }
+
+        const size = Math.ceil(this.#transaction.serialize().length / 2);
+
+        // Re-insert whatever was inside before
+        for (let i = 0; i < scriptSig.length; i++) {
+            this.#transaction.vin[i].scriptSig = scriptSig[i];
+        }
+
+        return size;
+    }*/
 
     getFee() {
         //TODO: find a cleaner way to add the dummy signature

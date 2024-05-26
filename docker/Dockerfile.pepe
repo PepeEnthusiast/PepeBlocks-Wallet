@@ -1,0 +1,18 @@
+FROM ubuntu:latest
+
+# setup pepecoin node
+
+WORKDIR /pepecoin
+RUN  apt-get update \
+  && apt-get install -y wget
+RUN wget https://github.com/pepecoinppc/pepecoin/releases/download/v1.0.1/pepecoin-1.0.1-x86_64-linux-gnu.tar.gz -O pepecoin.tar.gz
+RUN tar -zxvvf pepecoin.tar.gz
+RUN rm pepecoin.tar.gz
+WORKDIR /pepecoin/pepecoin-1.0.1
+#COPY docker/pivx.conf .
+#RUN ./install-params.sh
+WORKDIR bin
+RUN chmod +x ./pepecoind
+ENTRYPOINT ["/pepecoin/pepecoin-1.0.1/bin/pepecoind"]
+CMD ["-rpcport=51470", "-rpcallowip=0.0.0.0/0", "-rpcuser=rpc", "-rpcpassword=pivxrpc", "-rpcbind=0.0.0.0:51470"]
+EXPOSE 51470

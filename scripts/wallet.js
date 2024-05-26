@@ -248,7 +248,7 @@ export class Wallet {
     }
 
     hasShield() {
-        return !!this.#shield;
+        return false;// !!this.#shield;
     }
 
     /**
@@ -487,12 +487,15 @@ export class Wallet {
     /**
      * @returns key to backup. May be encrypted
      */
-    async getKeyToBackup() {
+    async getKeyToBackup(password) {
         if (await hasEncryptedWallet()) {
             const account = await (await Database.getInstance()).getAccount();
+            //const decryptedKey = await decrypt(account.encWif, password);
+            //return decryptedKey ? decryptedKey : '****************************************************';
             return account.encWif;
         }
         return this.#getKeyToEncrypt();
+        //return this.getMasterKey()?.keyToBackup;
     }
 
     /**
@@ -1042,6 +1045,123 @@ export class Wallet {
             }
         }
         return transactionBuilder.build();
+    }
+
+    /**
+     * Create a non signed transaction
+     * @param {string} address - Address to send to
+     * @param {number} value - Amount of satoshis to send
+     * @param {object} [opts] - Options
+     * @param {boolean} [opts.isDelegation] - Whether or not this delegates PIVs to `address`.
+     *     If set to true, `address` must be a valid cold staking address
+     * @param {boolean} [opts.useDelegatedInputs] - Whether or not cold stake inputs are to be used.
+     *    Should be set if this is an undelegation transaction.
+     * @param {string?} [opts.changeDelegationAddress] - Which address to use as change when `useDelegatedInputs` is set to true.
+     *     Only changes >= 1 PIV can be delegated
+     * @param {boolean} [opts.isProposal] - Whether or not this is a proposal transaction
+     */
+    createTransactionExtended(
+        address,
+        value,
+        {
+            isDelegation = false,
+            useDelegatedInputs = false,
+            useShieldInputs = false,
+            delegateChange = false,
+            changeDelegationAddress = null,
+            isProposal = false,
+            subtractFeeFromAmt = false,
+            changeAddress = '',
+            returnAddress = '',
+        } = {}
+    ) {
+        let txFee;
+        let txSize;
+        let balance;
+        if (useDelegatedInputs) {
+            balance = this.#mempool.coldBalance;
+        } else if (useShieldInputs) {
+            balance = this.#shield.getBalance();
+        } else {
+            balance = this.#mempool.balance;
+        }
+        if (balance < value) {
+            throw new Error('Not enough balance');
+        }
+        if (delegateChange && !changeDelegationAddress)
+            throw new Error(
+                '`delegateChange` was set to true, but no `changeDelegationAddress` was provided.'
+            );
+        const transactionBuilder = TransactionBuilder.create();
+        const isShieldTx = useShieldInputs || isShieldAddress(address);
+
+        // Add primary output
+        if (isDelegation) {
+            if (!returnAddress) [returnAddress] = this.getNewAddress(1);
+            transactionBuilder.addColdStakeOutput({
+                address: returnAddress,
+                addressColdStake: address,
+                value,
+            });
+        } else if (isProposal) {
+            transactionBuilder.addProposalOutput({
+                hash: address,
+                value,
+            });
+        } else {
+            transactionBuilder.addOutput({
+                address,
+                value,
+            });
+        }
+
+        if (!useShieldInputs) {
+            const requirement = useDelegatedInputs
+                ? OutpointState.P2CS
+                : OutpointState.P2PKH;
+            const utxos = this.#mempool.getUTXOs({
+                requirement: requirement | OutpointState.OURS,
+                target: value,
+            });
+            transactionBuilder.addUTXOs(utxos);
+
+            // Shield txs will handle change internally
+            if (isShieldTx) {
+                return transactionBuilder.build();
+            }
+
+            //const size = transactionBuilder.getSize();
+            //txSize = size;
+
+            const fee = transactionBuilder.getFee();
+            //txFee = fee;
+
+            const changeValue = transactionBuilder.valueIn - value - fee;
+            if (changeValue < 0) {
+                if (!subtractFeeFromAmt) {
+                    throw new Error('Not enough balance');
+                }
+                transactionBuilder.equallySubtractAmt(Math.abs(changeValue));
+            } else if (changeValue > 0) {
+                // TransactionBuilder will internally add the change only if it is not dust
+                if (!changeAddress) [changeAddress] = this.getNewAddress(1);
+                if (delegateChange && changeValue >= 1 * COIN) {
+                    transactionBuilder.addColdStakeOutput({
+                        address: changeAddress,
+                        value: changeValue,
+                        addressColdStake: changeDelegationAddress,
+                        isChange: true,
+                    });
+                } else {
+                    transactionBuilder.addOutput({
+                        address: changeAddress,
+                        value: changeValue,
+                        isChange: true,
+                    });
+                }
+            }
+        }
+        return { tx: transactionBuilder.build(), tb: transactionBuilder/*, fee: txFee, size: txSize*/ };
     }
 
     /**

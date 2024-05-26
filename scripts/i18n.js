@@ -189,7 +189,7 @@ export function translateStaticHTML(i18nLangs) {
 export const arrActiveLangs = [
     { code: 'auto', display: 'Auto', emoji: '🌐' },
     { code: 'en', display: 'English', emoji: '🇬🇧' },
-    { code: 'fr', display: 'French', emoji: '🇫🇷' },
+    /*{ code: 'fr', display: 'French', emoji: '🇫🇷' },
     { code: 'de', display: 'German', emoji: '🇩🇪' },
     { code: 'nl', display: 'Dutch', emoji: '🇳🇱' },
     { code: 'it', display: 'Italian', emoji: '🇮🇹' },
@@ -199,7 +199,7 @@ export const arrActiveLangs = [
     { code: 'cnr', display: 'Montenegrin', emoji: '🇲🇪' },
     { code: 'es-mx', display: 'Mexican Spanish', emoji: '🇲🇽' },
     { code: 'ph', display: 'Filipino', emoji: '🇵🇭' },
-    { code: 'uwu', display: 'UwU', emoji: '🐈' },
+    { code: 'uwu', display: 'UwU', emoji: '🐈' },*/
 ];
 
 export async function start() {

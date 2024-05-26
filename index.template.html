@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+  <link type="text/css" rel="stylesheet" id="dark-mode-custom-link">
+  <link type="text/css" rel="stylesheet" id="dark-mode-general-link">
+  <style lang="en" type="text/css" id="dark-mode-custom-style"></style>
+  <style lang="en" type="text/css" id="dark-mode-native-style"></style>
+  <style lang="en" type="text/css" id="dark-mode-native-sheet"></style>
   <head>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <!-- Primary Meta Tags -->
-    <title>My PIVX Wallet</title>
-    <meta name="title" content="My PIVX Wallet" />
-    <meta name="description" content="The wallet of the future - Receive, Send, Stake and Exchange using a completely decentralized, open-source, battle-hardened PIVX wallet." />
-    <meta name="keywords" content="web,wallet,webwallet,crypto,cryptocurrency,opensource,oss,pivx,staking,masternodes,exchange,swap,decentralized" />
+    <title>PepeBlocks Wallet</title>
+    <meta name="title" content="PepeBlocks Wallet" />
+    <meta name="description" content="PepeBlocks Wallet is a secure and user-friendly wallet for Pepecoin (PEPE). Manage your Pepecoins easily on our secure web app." />
+    <meta name="keywords" content="web,wallet,webwallet,crypto,cryptocurrency,opensource,pepe,pepecoin,decentralized" />
 
     <link rel="manifest" href="manifest.json"/>
     <meta name="mobile-web-app-capable" content="yes" />
@@ -17,63 +22,440 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_GB" />
-    <meta property="og:url" content="https://mypivxwallet.org/" />
-    <meta property="og:title" content="My PIVX Wallet" />
-    <meta property="og:description" content="The wallet of the future - Receive, Send, Stake and Exchange using a completely decentralized, open-source, battle-hardened PIVX wallet." />
-    <meta property="og:image" content="/logo_opaque-dark-bg.png" />
+    <meta property="og:url" content="https://wallet.pepeblocks.com/" />
+    <meta property="og:title" content="PepeBlocks Wallet" />
+    <meta property="og:description" content="PepeBlocks Wallet is a secure and user-friendly wallet for Pepecoin (PEPE). Manage your Pepecoins easily on our secure web app." />
+    <!--<meta property="og:image" content="/logo_opaque-dark-bg.png" />-->
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://mypivxwallet.org/" />
-    <meta property="twitter:title" content="My PIVX Wallet" />
-    <meta property="twitter:description" content="The wallet of the future - Receive, Send, Stake and Exchange using a completely decentralized, open-source, battle-hardened PIVX wallet." />
-    <meta property="twitter:image" content="/logo_opaque-dark-bg.png" />
+    <meta property="twitter:url" content="https://wallet.pepeblocks.com/" />
+    <meta property="twitter:title" content="PepeBlocks Wallet" />
+    <meta property="twitter:description" content="PepeBlocks Wallet is a secure and user-friendly wallet for Pepecoin (PEPE). Manage your Pepecoins easily on our secure web app." />
+    <!--<meta property="twitter:image" content="/logo_opaque-dark-bg.png" />-->
 
     <!-- Colour Theme -->
-    <meta name="msapplication-TileColor" content="#470e75" />
-    <meta name="theme-color" content="#470e75" />
+    <meta name="msapplication-TileColor" content="#55883A" />
+    <meta name="theme-color" content="#55883A" />
 
-    <link rel="icon" type="image/png" href="/logo_opaque-dark-bg.png" />
-    <link rel="canonical" href="https://mypivxwallet.org/" />
+    <!--<link rel="icon" type="image/png" href="/logo_opaque-dark-bg.png" />-->
+    <link rel="canonical" href="https://wallet.pepeblocks.com/" />
+
+    <!--<link rel="icon" href="/favicon-32.png" sizes="32x32">
+    <link rel="icon" href="/favicon-128.png" sizes="128x128">
+    <link rel="icon" href="/favicon-180.png" sizes="180x180">
+    <link rel="icon" href="/favicon-192.png" sizes="192x192">-->
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/2.3.2/browser/overlayscrollbars.browser.es6.min.js" integrity="sha512-jh4tHrf3Zaee6k2wOl1kVm4Gm5uIFbOQkUPfA419yLxADm1Q9jtihcGAJUl9ThBR8yc4/VYCOQCY/K87g14kSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      const { OverlayScrollbars } = OverlayScrollbarsGlobal;
+      var isDocumentReady = false;
+  
+  /* special thanks to the stackoverflow community for the getParameterByName function: https://stackoverflow.com/a/901144/3038650 */
+  function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+  function fixFooterHeightAndPosition() {
+    const screenWidth = $(window).outerWidth();
+    let socialLinkHeight = 70;
+  
+    if (screenWidth <= 575) {
+      // mobile
+      $('#footer-container').css('height', '70px');
+      socialLinkHeight = 40;
+    } else if (screenWidth >= 576 && screenWidth <= 991) {
+      // tablet
+      $('#footer-container').css('height', '70px');
+      socialLinkHeight = 42;
+    } else {
+      // desktop
+      $('#footer-container').css('height', '50px');
+      socialLinkHeight = 70;
+    }
+  
+    if (!true) {
+      // wait a tick before fixing footer position to give time for elements to be rendered
+      setTimeout(function() {
+        // ensure footer is shown at the bottom of the viewport
+        const offset = (window.innerHeight - $('#footer-container').position().top - $('#footer-container').outerHeight());
+        $('#footer-container').css('margin-top', (offset > 0 ? offset - 1 : '10') + 'px');
+  
+        if ('top' == 'side')
+          fixSidebarHeight();
+      }, 1);
+    } else {
+      // add spacing to the bottom of the body for the sticky footer
+      $('body').css('margin-bottom', ($('#footer-container').outerHeight() - 1) + 'px');
+  
+      if ('top' == 'side')
+        fixSidebarHeight();
+    }
+  
+    // fix social link font size
+    const fontSize = $('#footer-container').height() * (socialLinkHeight / 100);
+    $('#footer-container .social-link').css('font-size', fontSize);
+    $('#footer-container .social-link > img').css('width', fontSize + 'px').css('height', fontSize + 'px');
+  }
+  function enableTooltips() {
+    if ($().tooltip) {
+      // enable tooltips only if browser supports them
+      $('[data-bs-toggle="tooltip"]').tooltip();
+    }
+  }
+  function fixDataTableColumns() {
+    // wait 2 ticks before adjusting table columns to give time for elements to be rendered (1 tick doesn't seem to be enough for some tables)
+    setTimeout(function() {
+      // ensure columns are properly aligned
+      $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+    }, 2);
+  }
+  function rotateElement(elementSelector) {
+    const element = $(elementSelector);
+  
+    if (element.length > 0) {
+      $({ deg: 0 }).animate({ deg: 360 }, {
+        duration: 2000,
+        step: function(deg) {
+          element.css({
+            transform: 'rotateY(' + deg + 'deg)'
+          });
+        },
+        done: function() {
+          setTimeout(function() {
+            rotateElement(elementSelector);
+          }, 1500);
+        }
+      });
+    }
+  }
+  function startRotateElement(elementSelector) {
+    setTimeout(function() {
+      rotateElement(elementSelector);
+    }, 100);
+  }
+  function update_block_and_connection_stats() {
+    const summary_headers = {
+      'Accept': 'application/json, text/javascript, */*; q=0.01',
+      'footer-only': 'true'
+    };
+  
+    $.ajax({url: 'https://pepeblocks.com/ext/getsummary', headers: summary_headers, success: function(json) {
+      $("#lblConnections").text(json.connections + ' connections');
+      $("#lblBlockcount").text(json.blockcount + ' blocks');
+    }});
+  }
+  $(window).resize(function () {
+    if (isDocumentReady) {
+      //fixDataTableColumns();
+      fixFooterHeightAndPosition();
+    }
+  });
+  $(document).ready(function() {
+
+    isDocumentReady = true;
+
+    //if ('home' != '')
+    //  $('#home > a.nav-link').addClass('active');
+  
+    $(document).on('click', 'button.btn-close', function (e) {
+      e.preventDefault();
+      $('.alert-dismissible').on('closed.bs.alert', function (e) {
+        e.preventDefault();
+        fixFooterHeightAndPosition();
+      });
+    });
+
+    $(document).on('click', 'button#search-header-button', function (e) {
+      console.log('clicked')
+      if ($().tooltip)
+        $('#search-header-span').tooltip('hide');
+    });
+
+    $('#search-navbar-collapse').on('shown.bs.collapse', function (e) {
+      fixFooterHeightAndPosition();
+    });
+    $('#search-navbar-collapse').on('hidden.bs.collapse', function (e) {
+      fixFooterHeightAndPosition();
+    });
+  
+    setInterval(function() {
+      update_block_and_connection_stats();
+    }, 5000);
+  
+    update_block_and_connection_stats();
+    fixFooterHeightAndPosition();
+    enableTooltips();
+  });
+</script>
+
+
+<script>let topMenuExpanded = false;
+  function fixTopMenuCollapse(isResizing) {
+    if (topMenuExpanded && isResizing) {
+      // force collapse the menu if it is open and the screen is being resized,
+      // otherwise it could cause problems with the market dropdown after resizing back and forth between mobile and desktop sizes
+      bootstrap.Collapse.getOrCreateInstance($('#navbar-collapse')).hide();
+      topMenuExpanded = false;
+    }
+  
+    if ($().tooltip)
+      $('#navbar-toggler-span').tooltip('hide');
+  
+    if (topMenuExpanded) {
+      $('#search-header-button').hide();
+      $('#search-navbar-collapse').addClass('d-none');
+      $('#navbar-collapse').css('max-height', ($(window).outerHeight() - ($('#main-header div.navbar-header').outerHeight()) - (true == true ? $('div#footer-container').outerHeight(true) : 0) - 20).toString() + 'px');
+    } else
+      $('#navbar-collapse').css('max-height', 'none');
+  }
+  function hideMarketDropdown() {
+    if ($('li#markets > div.dropdown-menu').hasClass('show')) {
+      // close the market dropdown which was left open
+      bootstrap.Dropdown.getOrCreateInstance($('li#markets > a.dropdown-toggle')).hide();
+    }
+  }
+  $(window).resize(function () {
+    if ($(window).outerWidth() < 992)
+      hideMarketDropdown();
+  
+    fixTopMenuCollapse(true);
+  });
+  $(document).ready(function() {
+    $('#navbar-collapse').on('show.bs.collapse', function (e) {
+      topMenuExpanded = true;
+      fixTopMenuCollapse(false);
+    });
+    $('#navbar-collapse').on('shown.bs.collapse', function (e) {
+      // initialize the scrollbar only after the navbar collapse has finished since it goes too slow if initialized before
+      OverlayScrollbars($('#navbar-collapse')[0], {});
+    });
+    $('#navbar-collapse').on('hide.bs.collapse', function (e) {
+      topMenuExpanded = false;
+      fixTopMenuCollapse(false);
+      OverlayScrollbars($('#navbar-collapse')[0], {}).destroy();
+    });
+    $('#navbar-collapse').on('hidden.bs.collapse', function (e) {
+      $('#search-header-button').show();
+      $('#search-navbar-collapse').removeClass('d-none');
+    });
+  });
+</script>
+
+
+
+
+
+
+
+
+
   </head>
 
   <body>
     <div id="page-container" class="home-hero">
       <div id="content-wrap">
         <!-- NAVBAR -->
-        <nav class="navbar navbar-expand-lg sticky-top navbar-dark navbarSpecial">
-          <div class="container">
-            <img onclick="MPW.openTab(event, 'keypair')" style="cursor: pointer;" class="nav-logo navbar-brand noselect" alt="PIVX" id="mpw-main-logo" />
-            <button id="navbarToggler" class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse noselect" id="navbarNav">
-              <!-- MAIN NAVBAR -->
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><span id="dashboard" class="nav-link tablinks" onclick="MPW.openTab(event, 'keypair')" data-i18n="navDashboard">Dashboard</span></li>
-                <li class="nav-item"><span id="stakeTab" class="nav-link tablinks" onclick="MPW.openTab(event, 'StakingTab')" data-i18n="navStake">Stake</span></li>
-                <li class="nav-item"><span id="masternodeTab" class="nav-link tablinks" onclick="MPW.openTab(event, 'Masternode')" data-i18n="navMasternode">Masternode</span></li>
-                <li class="nav-item"><span id="governanceTab" class="nav-link tablinks" onclick="MPW.openTab(event, 'Governance')" data-i18n="navGovernance">Governance</span></li>
-                <li class="nav-item"><span class="nav-link tablinks" onclick="MPW.openTab(event, 'Settings');" data-i18n="navSettings">Settings</span></li>
-              </ul>
+        
+        <!--<div class="alert alert-danger" role="alert">
+          <strong>Attention:</strong> PepeBlocks Wallet is currently in BETA. Please <strong>backup your private key immediately</strong>. We highly recommend importing your private key into the official wallet to ensure uninterrupted access to your funds in case this website becomes unavailable.
+        </div>-->
 
-              <!-- SIDE NAVBAR -->
-              <div class="form-inline my-2 my-lg-0">
-                <ul class="navbar-nav mr-auto small-dark-bg">
-                  <li class="nav-item">
-                    <span class="nav-link ptr" style="display: none;" id="Debug" onclick="MPW.toggleDebug()" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<b>Debug Mode</b><br>You're in debug mode, which is logging additional verbose data in the console"><i class="fa-solid fa-bug"></i></span>
-                  </li>
-                  <li class="nav-item">
-                    <span class="nav-link ptr" style="display: none;" id="Testnet" onclick="MPW.toggleTestnet()" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<b>Testnet Mode</b><br>You're currently using MPW on the Testnet Network"><i class="fa-solid fa-network-wired"></i></span>
-                  </li>
-                  <li class="nav-item">
-                    <span class="nav-link ptr" id="Network" onclick="MPW.toggleNetwork()" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<b>Internet Access</b><br>Whether or not your node is connected to the internet"><i class="fa-solid fa-wifi"></i></span>
-                  </li>
-                </ul>
-              </div>
+
+
+        <!--<div id="alertBox" class="alert alert-danger" style="display: none;" role="alert">
+          <strong>Important Notice:</strong> PepeBlocks Wallet is currently in BETA. Please <strong>backup your private key immediately</strong>.<br/><br/>We highly recommend importing your private key into the official wallet to ensure uninterrupted access to your funds in case this website becomes unavailable.
+          <br/><br/>
+          <button id="understandButton" class="btn btn-primary">I've Secured My Private Key</button>
+        </div>-->
+
+        <div id="alertBox" class="alert alert-danger" style="display: none;" role="alert">
+          <strong>Important Notice:</strong> PepeBlocks Wallet is currently in BETA. Please <strong>backup your private key immediately</strong>.
+          <br/><br/>We <strong>highly recommend</strong> importing your private key into the official wallet to ensure uninterrupted access to your funds in case this website becomes unavailable.
+          <br/><br/>To import your private key into the Pepecoin Core Wallet and backup your wallet.dat file, follow these steps:
+          <br/><br/>
+          <ol>
+              <li>Download and install Pepecoin Core Wallet from the official website.</li>
+              <li>Launch Pepecoin Core Wallet and wait for it to synchronize with the network.</li>
+              <li>Go to the 'File' menu and select 'Import Private Key'.</li>
+              <li>Enter your private key and optionally a label, then click 'Import'.</li>
+              <li>After importing your private key, backup your wallet.dat file by going to 'File' > 'Backup Wallet' and save it in a secure location.</li>
+          </ol>
+          <br/>
+          <button id="understandButton" class="btn btn-primary">I've Secured My Private Key</button>
+      </div>
+      
+        
+<!-- Modal for confirmation -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-white" id="confirmationModalLabel">Confirmation Required</h5>
+        <button type="button" class="close" id="closeModalButton" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body m-0">
+        <ul style="list-style-type: none; padding-left: 0;">
+          <li>
+            <u style="color: #fff;">Please confirm that you understand the following:</u>
+          </li><br>
+          <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+            • PepeBlocks Wallet is currently in BETA.
+          </li>
+          <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+            • There's no way to recover your funds if you lose access to your private key.
+          </li>
+          <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+            • It's highly recommended to back up your private key and import it into the official Pepecoin Core Wallet using the provided instructions.
+          </li>
+          <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+            • Before transferring larger amounts, test the process by sending small amounts to your receiving address and verifying they are received on the blockchain.
+          </li>
+          <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+            • Never share your private key with anyone. If someone obtains it, they can access and steal your funds.
+          </li>
+          <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+            • We are not responsible for any loss of funds due to failure to back up your private key or import it into the official wallet.
+          </li>
+        </ul>
+        <p style="color: #fff;">This message will not be displayed for 24 hours once confirmed.</p>
+      </div>
+      <div class="modal-footer" hidden="">
+        <button id="confirmButton" type="button" aria-label="Close" class="pivx-button-big" style="color: rgb(255, 255, 255); float: right; opacity: 0.8;">Confirm (30)</button>
+        <button id="cancelButton" type="button" aria-label="Close" class="pivx-button-big" style="color: rgb(255, 255, 255); float: right; opacity: 0.8;">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.getElementById('understandButton').addEventListener('click', function () {
+      $('#confirmationModal').modal('show');
+      startTimer(15); // Start the timer for 15 seconds
+  });
+
+  document.getElementById('cancelButton').addEventListener('click', function () {
+      $('#confirmationModal').modal('hide');
+  });
+
+  document.getElementById('closeModalButton').addEventListener('click', function () {
+      $('#confirmationModal').modal('hide');
+  });
+  
+  // Function to set the cookie
+  function setCookie(name, value, hours) {
+      let date = new Date();
+      date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+      let expires = "expires=" + date.toUTCString();
+      document.cookie = name + "=" + value + ";" + expires + ";path=/";
+  }
+
+  // Function to get the cookie
+  function getCookie(name) {
+      let nameEQ = name + "=";
+      let ca = document.cookie.split(';');
+      for(let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+  }
+
+  // Function to check if the alert should be displayed
+  async function checkAlert() {
+      if (getCookie("betaAlertDismissed") === "true") {
+          document.getElementById("alertBox").style.display = "none";
+      } else if(await MPW.isConnected() && document.getElementById('dashboard').classList.contains('active')) {
+          document.getElementById("alertBox").style.display = "block";
+      }
+  }
+
+  let timerStarted = false;
+
+  // Function to start the timer
+  function startTimer(duration) {
+      if(timerStarted) return;
+      timerStarted = true;
+      var timer = duration, seconds;
+      var confirmButton = document.getElementById("confirmButton");
+      confirmButton.disabled = true;
+      --timer;
+      var interval = setInterval(function () {
+          seconds = parseInt(timer % 60, 10);
+          confirmButton.innerText = "Confirm (" + seconds + ")";
+          if (--timer < 0) {
+              clearInterval(interval);
+              confirmButton.innerText = "Confirm";
+              confirmButton.disabled = false; // Enable the button after the timer ends
+          }else{
+            confirmButton.disabled = true; // Disable the button
+          }
+      }, 1000);
+  }
+
+  document.getElementById("confirmButton").addEventListener("click", function() {
+      document.getElementById("alertBox").style.display = "none";
+      $('#confirmationModal').modal('hide');
+      setCookie("betaAlertDismissed", "true", 24); // 24 hours cookies
+  });
+
+  window.onload = function() {
+      var interval = setInterval(function () {
+        checkAlert();
+      }, 1000);
+  }
+</script>
+
+      
+
+
+
+
+
+
+
+
+        <div class="navbar fixed-top bg-primary navbar-dark" id="main-header">
+         <div class="navbar navbar-expand-lg" style="padding-left:0;">
+            <div class="container">
+               <div class="navbar-header"><span id="navbar-toggler-span" alt="Toggle Menu" title="" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Toggle Menu" aria-label="Toggle Menu"><button class="navbar-toggler collapsed" id="navbarToggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button></span></div>
+               <a href="/" alt="Pepecoin Home" title="" style="order:-1;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Pepecoin Home" aria-label="Pepecoin Home"><img class="logo-main" id="mpw-main-logo" style="margin:0;max-height:50px;"></a>
+               <div class="collapse navbar-collapse" id="navbar-collapse">
+                  <ul class="navbar-nav" style="width:100%;">
+                     <li class="nav-item" id="home"><a class="nav-link" href="https://pepeblocks.com"><span class="fa-solid fa-cubes"></span><span class="margin-left-5">Explorer</span></a></li>
+                     <li class="nav-item" id="movement"><a class="nav-link" href="https://pepeblocks.com/movement"><span class="fa-regular fa-money-bill-1"></span><span class="margin-left-5">Movement</span></a></li>
+                     <li class="nav-item" id="network"><a class="nav-link" href="https://pepeblocks.com/network"><span class="fa-solid fa-network-wired"></span><span class="margin-left-5">Network</span></a></li>
+                     <li class="nav-item" id="richlist"><a class="nav-link" href="https://pepeblocks.com/richlist"><span class="fa-brands fa-btc"></span><span class="margin-left-5">Top 100</span></a></li>
+                     <li class="nav-item" id="markets"><a class="nav-link" href="https://pepeblocks.com/markets/xeggex/PEPENET/USDT"><span class="fa-solid fa-chart-line"></span><span class="margin-left-5">Markets</span></a></li>
+                     <li class="nav-item" id="info"><a class="nav-link" href="https://pepeblocks.com/info"><span class="fa-solid fa-circle-info"></span><span class="margin-left-5">API</span></a></li>
+                     <li class="nav-item" id="claim-address"><a class="nav-link" href="https://pepeblocks.com/claim"><span class="fa-regular fa-address-card"></span><span class="margin-left-5">Claim Address</span></a></li>
+                     <li class="nav-item" id="mempool"><a class="nav-link" href="https://trezor.pepeblocks.com/mempool" target="_self"><span class="fa-solid fa-memory"></span><span class="margin-left-5">MemPool</span></a></li>
+                     <li class="nav-item" id="wallet"><a id="dashboard" class="nav-link active pointer" onclick="MPW.openTab(event, 'keypair');"><span class="fa-solid fa-wallet"></span><span class="margin-left-5">Wallet [BETA]</span></a></li>
+                     <li class="nav-item" id="settings"><a id="_settings" class="nav-link pointer" onclick="MPW.openTab(event, 'Settings');"><span class="fa-solid fa-wallet"></span><span class="margin-left-5">Settings</span></a></li>
+                  </ul>
+               </div>
+               <span id="search-header-span" alt="Search" title="" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Search" aria-label="Search"><button id="search-header-button" data-bs-toggle="collapse" data-bs-target="#search-navbar-collapse"><span class="fa-solid fa-magnifying-glass"></span></button></span>
             </div>
-          </div>
-        </nav>
+         </div>
+         <div class="collapse" id="search-navbar-collapse">
+            <div class="navbar-nav align-items-lg-center search-box-custom" style="width:100%;">
+               <form class="form-inline col-12 d-flex justify-content-center" method="post" action="https://pepeblocks.com/search">
+                  <div class="input-group input-group-md search-for" style="width:100%;"><input class="form-control" type="text" name="search" placeholder="Search by block height, block hash, tx hash or address"><button class="btn btn-success btn-sm" type="submit">Search</button></div>
+               </form>
+            </div>
+         </div>
+      </div>
+ 
         <!-- // NAVBAR -->
 
         <!-- // QR MODAL -->
@@ -133,13 +515,13 @@
           </div>
         </div>
 
-        <br />
+        <!--<br />-->
         <!-- // CONFIRM MODAL -->
         <div class="modal" id="confirmModal" tabindex="-1" style="z-index: 2000; background-color: #00000063;" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
           <div id="confirmModalDialog" class="modal-dialog modal-dialog-centered max-w-600" role="document">
             <div id="confirmModalMain" class="modal-content">
               <div class="modal-header" id="confirmModalHeader">
-                <h3 class="modal-title" id="confirmModalTitle" style="text-align: center; width: 100%; color: #8e21ff;"></h3>
+                <h3 class="modal-title" id="confirmModalTitle" style="text-align: center; width: 100%; color: #fff;"></h3>
               </div>
               <div id="confirmModalContent" class="modal-body center-text">
                 <!-- JS populated modal content -->
@@ -159,7 +541,7 @@
                 <!-- PIVX TITLE SECTION -->
                 <div class="col-md-12 title-section float-left rm-pd">
                   <h1 class="pivx-bold-title center-text">
-                    <span data-i18n="loadingTitle">My PIVX Wallet is</span>
+                    <span data-i18n="loadingTitle">PepeBlocks Wallet is</span>
                     <div data-i18n="loading">Loading</div>
                   </h1>
                 </div>
@@ -349,7 +731,7 @@
 
                       <hr />
 
-                      <label for="explorer" data-i18n="settingsExplorer">Choose an explorer:</label>
+                      <label for="explorer" data-i18n="settingsExplorer">Choose a backend:</label>
                       <br />
                       <select id="explorer" class="form-control" name="explorer">
                         <!-- Populated via JS at DOM load (settings.js) -->
@@ -357,11 +739,8 @@
 
                       <br />
 
-                      <label for="node" data-i18n="settingsPivxNode">Choose a PIVX node:</label>
+                      <!--<label for="node" data-i18n="settingsPivxNode">Choose a PIVX node:</label>
                       <br />
-                      <select id="node" class="form-control" name="node">
-                        <!-- Populated via JS at DOM load (settings.js) -->
-                      </select>
 
                       <br />
 
@@ -374,12 +753,10 @@
 
                       <label for="analytics" data-i18n="settingsAnalytics">Choose your analytics contribution level:</label>
                       <br />
-                      <select id="analytics" class="form-control" name="analytics">
-                        <!-- Populated via JS at DOM load (settings.js) -->
-                      </select>
-                      <div id="analyticsDescriptor"></div>
+                      <div id="analyticsDescriptor"></div>-->
 
                       <hr>
+
                       <div id="changePassword-container">
 
                         <div id="changePasswordBtn" onclick="MPW.changePassword()" style="cursor: pointer; border: 0px; border-radius: 7px; padding: 6px 10px; margin: 0px 1px; background: linear-gradient(183deg, #9621ff9c, #7d21ffc7); color: #fff; font-weight: bold; width: fit-content; margin: 20px 0px;">
@@ -395,7 +772,7 @@
                       </div>
 
                       <!-- Default switch -->
-                      <div class="custom-control custom-switch">
+                      <!--<div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="debugToggler" onclick="MPW.toggleDebug()">
                         <label data-i18n="settingsToggleDebug" class="custom-control-label" for="debugToggler">Debug Mode</label>
                       </div>
@@ -405,7 +782,7 @@
                       <div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="testnetToggler" onclick="MPW.toggleTestnet()">
                         <label data-i18n="settingsToggleTestnet" class="custom-control-label" for="testnetToggler">Testnet Mode</label>
-                      </div>
+                      </div>-->
 
                       <br>
 
@@ -416,11 +793,11 @@
 
                       <br>
 
-                      <div class="custom-control custom-switch">
+                      <!--<div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="advancedModeToggler" onclick="MPW.toggleAdvancedMode()">
                         <label data-i18n="settingsToggleAdvancedMode" class="custom-control-label" for="advancedModeToggler">Advanced Mode</label>
                         <p style="opacity: 0.6; margin-top: 5px;"><i class="fa-solid fa-triangle-exclamation" style="margin-right: 5px;"></i><span data-i18n="settingsToggleAdvancedModeSubtext">This unlocks deeper functionality and customisation, but may be overwhelming and potentially dangerous for unexperienced users!</p>
-                      </div>
+                      </div>-->
 
                     </div>
 
@@ -435,7 +812,7 @@
                         <!-- Populated via JS at Price Source data load (prices.js) -->
                       </select>
 
-                      <p style="opacity: 0.6; margin-top: 5px;"><span data-i18n="priceProvidedBy">Price data provided by</span> <a class="active" href="https://pivxla.bz/oracle" target="_blank" rel="noopener">Labs Oracle</a></p>
+                      <p style="opacity: 0.6; margin-top: 5px;"><span data-i18n="priceProvidedBy">Price data provided by</span> <a class="active" href="https://pepeblocks.com" target="_self" rel="noopener">PepeBlocks.com</a></p>
 
                       <br />
 
@@ -466,16 +843,31 @@
       Alert
     -->
       <div class="alertPositioning"></div>
-      <footer id="foot">
-        <div class="footer">
-          <div>
-            <span> © MIT 2023 </span> - <span style="cursor: pointer;" onclick="MPW.playMusic()" data-i18n="footerBuiltWithPivxLabs">Built with 💜 by PIVX Labs</span><br />
-            <a href="https://github.com/PIVX-Labs/MyPIVXWallet" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></i></a> - <a href="https://discord.gg/zTScGaGtgv" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-discord"></i></i></a> - <a href="https://medium.com/@pivx-labs" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-medium"></i></i></a> - <span id="version" class="ptr" onclick="MPW.renderChangelog();"></span>
-          </div>
+      <div class="nav navbar navbar-default d-flex footer fixed-bottom bg-primary navbar-dark" id="footer-container" role="navigation" style="height: 50px;">
+        <div class="col-4 navbar-nav">
+           <ul class="nav justify-content-left">
+              <li class="float-start"><a class="nav-link social-link border-0" href="https://github.com/pepecoinppc/pepecoin" target="_blank" alt="Pepecoin Github" title="" data-bs-toggle="tooltip" data-bs-placement="top" style="font-size: 30.52px;" data-bs-original-title="Pepecoin Github" aria-label="Pepecoin Github"><img class="vertical-align-middle" id="github-32" style="width: 30.52px; height: 30.52px;"></a></li>
+              <li class="float-start"><a class="nav-link social-link border-0" href="https://x.com/PepecoinNetwork" target="_blank" alt="Pepecoin X (Twitter)" title="" data-bs-toggle="tooltip" data-bs-placement="top" style="font-size: 30.52px;" data-bs-original-title="Pepecoin X (Twitter)" aria-label="Pepecoin X (Twitter)"><img class="vertical-align-middle" id="x-32" style="width: 30.52px; height: 30.52px;"></a></li>
+              <li class="float-start"><a class="nav-link social-link border-0" href="https://pepecoin.org/discord" target="_blank" alt="Pepecoin Discord" title="" data-bs-toggle="tooltip" data-bs-placement="top" style="font-size: 30.52px;" data-bs-original-title="Pepecoin Discord" aria-label="Pepecoin Discord"><img class="vertical-align-middle"id="discord-32" style="width: 30.52px; height: 30.52px;"></a></li>
+              <li class="float-start"><a class="nav-link social-link border-0" href="https://t.me/PepecoinGroup" target="_blank" alt="Pepecoin Telegram" title="" data-bs-toggle="tooltip" data-bs-placement="top" style="font-size: 30.52px;" data-bs-original-title="Pepecoin Telegram" aria-label="Pepecoin Telegram"><img class="vertical-align-middle" id="telegram-32" style="width: 30.52px; height: 30.52px;"></a></li>
+              <li class="float-start"><a class="nav-link social-link border-0" href="https://pepecoin.org/" target="_blank" alt="Pepecoin Website" title="" data-bs-toggle="tooltip" data-bs-placement="top" style="font-size: 30.52px;" data-bs-original-title="Pepecoin Website" aria-label="Pepecoin Website"><img class="vertical-align-middle" id="pepecoinlogo-32" style="width: 30.52px; height: 30.52px;"></a></li>
+              <li class="float-start"><a class="nav-link social-link border-0" href="https://www.coingecko.com/en/coins/pepecoin-network" target="_blank" alt="Pepecoin Coingecko" title="" data-bs-toggle="tooltip" data-bs-placement="top" style="font-size: 30.52px;" data-bs-original-title="Pepecoin Coingecko" aria-label="Pepecoin Coingecko"><img class="vertical-align-middle" id="coingecko-32" style="width: 30.52px; height: 30.52px;"></a></li>
+              <li class="float-start"><a class="nav-link social-link border-0" href="https://pepeguild.com/" target="_blank" alt="Pepecoin Mining Pool" title="" data-bs-toggle="tooltip" data-bs-placement="top" style="font-size: 30.52px;" data-bs-original-title="Pepecoin Mining Pool" aria-label="Pepecoin Mining Pool"><img class="vertical-align-middle" id="pepeguild-32" style="width: 30.52px; height: 30.52px;"></a></li>
+              <li class="float-start"><a class="nav-link social-link border-0" href="https://miningpoolstats.stream/pepecoin" target="_blank" alt="Pepecoin MiningPoolStats" title="" data-bs-toggle="tooltip" data-bs-placement="top" style="font-size: 30.52px;" data-bs-original-title="Pepecoin MiningPoolStats" aria-label="Pepecoin MiningPoolStats"><img class="vertical-align-middle"  id="miningpoolstats-32" style="width: 30.52px; height: 30.52px;"></a></li>
+           </ul>
         </div>
-      </footer>
+        <div class="col-4 navbar-nav">
+           <ul class="nav justify-content-center">
+              <li class="text-center">
+                 <p>PepeBlocks.com - Hosted by <a href="https://pepeblocks.com/address/Pps2nuEbFRtWeYPpELAdrgvK6QekEayvk8" style="display: inline; color: #000000;">realmasterkush</a></p>
+              </li>
+           </ul>
+        </div>
+        <div class="col-4 navbar-nav">
+           <ui class="nav justify-content-end"><label class="badge nav-link border-0 float-end" id="lblBlockcount">0 blocks</label><label class="badge nav-link border-0 float-end" id="lblConnections">0 connections</label></ui>
+        </div>
+     </div>
     </div>
-
     <div class="blackBack blackBackHide d-none" id="blackBack"></div>
     <div id="app"></div>
   </body>

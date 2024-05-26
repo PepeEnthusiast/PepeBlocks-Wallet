@@ -1,8 +1,8 @@
 {
-    "name": "My PIVX Wallet",
-    "short_name": "MPW",
+    "name": "PepeBlocks Wallet",
+    "short_name": "PepeBlocks Wallet",
     "start_url": ".",
-    "description": "Send, Stake and Receive with PIVX's most universal wallet. ",
+    "description": "PepeBlocks Wallet is a secure and user-friendly wallet for Pepecoin (PEPE). Manage your Pepecoins easily on our secure web app.",
     "orientation": "portrait",
     "display": "standalone",
     "icons": [
@@ -17,6 +17,6 @@
             "type": "image/png"
         }
     ],
-    "background_color": "#17012c",
-    "theme_color": "#470e75"
+    "background_color": "#55883A",
+    "theme_color": "#55883A"
 }

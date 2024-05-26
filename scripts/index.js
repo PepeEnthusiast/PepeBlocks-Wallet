@@ -1,8 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fontsource/chivo/900.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+
+import '../assets/style/pepeblocks.css';
+
 import '../assets/style/style.css';
+
+import '../assets/style/custom.min.css';
+import '../assets/style/style.min.css';
+
 import 'bootstrap';
+
+////////// import '../assets/style/bootstrap.min.css';
 
 // Import all montserrat font weights
 import.meta.webpackContext('@fontsource/montserrat/', {
@@ -20,6 +29,7 @@ export {
     restoreWallet,
     playMusic,
     openExplorer,
+    openExplorerSecondary,
     doms,
     importMasternode,
     destroyMasternode,
@@ -31,6 +41,7 @@ export {
 } from './global.js';
 export { wallet, getNewAddress } from './wallet.js';
 export {
+    isConnected,
     logOut,
     toggleTestnet,
     toggleDebug,

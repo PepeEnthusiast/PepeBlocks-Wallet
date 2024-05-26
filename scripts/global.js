@@ -253,13 +253,19 @@ export async function start() {
 
     // If allowed by settings: submit a simple 'hit' (app load) to Labs Analytics
     getNetwork().submitAnalytics('hit');
-    setInterval(() => {
+    
+    await refreshChainData();
+
+    // Fetch the PIVX prices
+    await refreshPriceDisplay();
+
+    setInterval(async () => {
         // Refresh blockchain data
-        refreshChainData();
+        await refreshChainData();
 
         // Fetch the PIVX prices
-        refreshPriceDisplay();
-    }, 15000);
+        await refreshPriceDisplay();
+    }, 5000);
 
     // Check for recent upgrades, display the changelog
     checkForUpgrades();
@@ -281,17 +287,17 @@ async function refreshPriceDisplay() {
 
 function subscribeToNetworkEvents() {
     getEventEmitter().on('network-toggle', (value) => {
-        doms.domNetwork.innerHTML =
-            '<i class="fa-solid fa-' + (value ? 'wifi' : 'ban') + '"></i>';
+        /*doms.domNetwork.innerHTML =
+            '<i class="fa-solid fa-' + (value ? 'wifi' : 'ban') + '"></i>';*/
     });
 
     getEventEmitter().on('new-block', (block) => {
         debugLog(DebugTopics.GLOBAL, `New block detected! ${block}`);
 
         // If it's open: update the Governance Dashboard
-        if (doms.domGovTab.classList.contains('active')) {
+        /*if (doms.domGovTab.classList.contains('active')) {
             updateGovernanceTab();
-        }
+        }*/
     });
 
     getEventEmitter().on('transaction-sent', (success, result) => {
@@ -329,6 +335,8 @@ export function openTab(evt, tabName) {
     // Only allow switching tabs if MPw is loaded
     if (!isLoaded()) return;
 
+    //console.log(tabName)
+
     // Hide all screens and deactivate link highlights
     for (const domScreen of doms.arrDomScreens)
         domScreen.style.display = 'none';
@@ -347,6 +355,14 @@ export function openTab(evt, tabName) {
         updateGovernanceTab();
     } else if (tabName === 'Masternode') {
         updateMasternodeTab();
+    }
+
+    if(tabName === 'Settings') {
+        document.getElementById('dashboard').classList.remove('active');
+        document.getElementById('_settings').classList.add('active');
+    } else {
+        document.getElementById('dashboard').classList.add('active');
+        document.getElementById('_settings').classList.remove('active');
     }
 }
 
@@ -388,15 +404,40 @@ export function optimiseCurrencyLocale(nAmount) {
 export async function openExplorer(strAddress = '') {
     if (wallet.isLoaded() && wallet.isHD() && !strAddress) {
         const xpub = wallet.getXPub();
-        window.open(cExplorer.url + '/xpub/' + xpub, '_blank');
+        window.open(cExplorer.url + '/xpub/' + xpub, '_self');
     } else {
         const address = strAddress || wallet.getAddress();
-        window.open(cExplorer.url + '/address/' + address, '_blank');
+        window.open(cExplorer.url + '/address/' + address, '_self');
     }
 }
 
+/**
+ * Open the Secondary Explorer in a new tab for the current wallet, or a specific address
+ * @param {string?} strAddress - Optional address to open, if void, the master key is used
+ */
+export async function openExplorerSecondary(strAddress = '') {
+    const address = strAddress || wallet.getAddress();
+    window.open("https://pepeblocks.com" + '/address/' + address, '_self');
+}
+
 async function loadImages() {
-    const images = [['mpw-main-logo', import('../assets/logo.png')]];
+    const images = 
+    [
+        ['mpw-main-logo', import('../assets/pepecoin.png')], 
+        ['github-32', import('../assets/github-32.png')], 
+        ['x-32', import('../assets/x-32.png')], 
+        ['telegram-32', import('../assets/telegram-32.png')], 
+        ['discord-32', import('../assets/discord-32.png')], 
+        ['pepeguild-32', import('../assets/pepeguild-32.png')], 
+        ['pepecoinlogo-32', import('../assets/pepecoinlogo-32.png')], 
+        ['miningpoolstats-32', import('../assets/miningpoolstats-32.png')], 
+        ['coingecko-32', import('../assets/coingecko-32.png')], 
+        ['github-32', import('../assets/github-32.png')], 
+        ['github-32', import('../assets/github-32.png')], 
+        ['github-32', import('../assets/github-32.png')], 
+        ['github-32', import('../assets/github-32.png')], 
+        ['github-32', import('../assets/github-32.png')]
+    ];
 
     const promises = images.map(([id, path]) =>
         (async () => {
@@ -409,7 +450,7 @@ async function loadImages() {
 let audio = null;
 export async function playMusic() {
     // On first play: load the audio into memory from the host
-    if (audio === null) {
+    /*if (audio === null) {
         // Dynamically load the file
         audio = new Audio((await import('../assets/music.mp3')).default);
     }
@@ -423,7 +464,7 @@ export async function playMusic() {
         audio.pause();
         for (const domImg of document.getElementsByTagName('img'))
             domImg.classList.remove('discoFilter');
-    }
+    }*/
 }
 
 export function toClipboard(source, caller) {

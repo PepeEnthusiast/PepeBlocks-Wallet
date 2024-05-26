@@ -73,6 +73,35 @@ export const useWallet = defineStore('wallet', () => {
     getEventEmitter().on('shield-loaded-from-disk', () => {
         hasShield.value = wallet.hasShield();
     });
+
+
+
+    const createTransaction = lockableFunction(
+        async (address, value, opts) => {
+            const tx = wallet.createTransactionExtended(address, value, opts);
+            if (wallet.isHardwareWallet()) {
+                await ledgerSignTransaction(wallet, tx.tx);
+            } else {
+                await wallet.sign(tx.tx);
+            }
+            return tx;
+        }
+    );
+
+    const sendTransaction = lockableFunction(
+        async (network, tx) => {
+            const res = await network.sendTransaction(tx.serialize());
+            if (res) {
+                await wallet.addTransaction(tx);
+            } else {
+                wallet.discardTransaction(tx);
+            }
+            return res;
+        }
+    );
+
+
+
     const createAndSendTransaction = lockableFunction(
         async (network, address, value, opts) => {
             const tx = wallet.createTransaction(address, value, opts);
@@ -90,7 +119,8 @@ export const useWallet = defineStore('wallet', () => {
             return res;
         }
     );
-    const isCreatingTransaction = () => createAndSendTransaction.isLocked();
+
+    const isCreatingTransaction = () => createAndSendTransaction.isLocked() || createTransaction.isLocked() || sendTransaction.isLocked();
 
     getEventEmitter().on('toggle-network', async () => {
         isEncrypted.value = await hasEncryptedWallet();
@@ -134,6 +164,8 @@ export const useWallet = defineStore('wallet', () => {
         price,
         sync,
         createAndSendTransaction,
+        createTransaction,
+        sendTransaction,
         loadFromDisk,
         coldBalance,
     };

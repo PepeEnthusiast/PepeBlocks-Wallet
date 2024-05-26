@@ -40,7 +40,7 @@ async function generateWallet() {
 </script>
 
 <template>
-    <div class="col-12 col-lg-6 p-2">
+    <!--<div class="col-12 col-lg-6 p-2">
         <div class="h-100 dashboard-item dashboard-display">
             <div class="coinstat-icon" v-html="phone"></div>
             <div class="col-md-12 dashboard-title">
@@ -64,14 +64,14 @@ async function generateWallet() {
                 </span>
             </button>
         </div>
-    </div>
+    </div>-->
     <Teleport to="body">
         <modal :show="showModal" @close="showModal = false">
             <template #body>
                 <p class="modal-label"></p>
                 <div class="auto-fit">
-                    <span v-html="translation.thisIsYourSeed"></span>
                     <b>
+                    <span v-html="translation.thisIsYourSeed"></span>
                         <div
                             translate="no"
                             class="seed-phrase noselect notranslate"

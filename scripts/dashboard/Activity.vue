@@ -306,8 +306,8 @@ defineExpose({ update, reset, getTxCount });
                                 </td>
                                 <td class="align-middle pr-10px txcode">
                                     <a
-                                        :href="explorerUrl + '/tx/' + tx.id"
-                                        target="_blank"
+                                        :href="'https://pepeblocks.com/tx/' + tx.id"
+                                        target="_self"
                                         rel="noopener noreferrer"
                                     >
                                         <code

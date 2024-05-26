@@ -9,6 +9,7 @@ import { MAP_B58, createAlert } from '../misc.js';
 const addressPrefix = ref('');
 const addressPrefixShow = ref(false);
 const addressPrefixElement = ref({});
+const matchCaseElement = ref(false);
 const isGenerating = ref(false);
 const attempts = ref(0);
 /**
@@ -54,11 +55,22 @@ function generate() {
         return;
     }
 
+    var bMatchCase = matchCaseElement.value;
+
     // Remove space from prefix
     addressPrefix.value = addressPrefix.value.replace(/ /g, '');
-    const prefix = addressPrefix.value.toLowerCase();
+    var prefix = addressPrefix.value;
+    if(!bMatchCase) {
+        prefix = prefix.toLowerCase();
+    }
+
+    var mapB58 = MAP_B58;
+    if(!bMatchCase) {
+        mapB58 = mapB58.toLowerCase();
+    }
+
     for (const char of prefix) {
-        if (!MAP_B58.toLowerCase().includes(char))
+        if (!mapB58.includes(char))
             return createAlert(
                 'warning',
                 tr(ALERTS.UNSUPPORTED_CHARACTER, [{ char: char }]),
@@ -79,12 +91,20 @@ function generate() {
 
         const checkResult = ({ data }) => {
             attempts.value++;
-            if (data.pub.substr(1, prefix.length).toLowerCase() === prefix) {
+
+            var str = data.pub.substr(1, prefix.length);
+            if(!bMatchCase) {
+                str = str.toLowerCase();
+            }
+
+            if (str === prefix) {
                 try {
                     emit('import-wallet', data.priv);
                     console.log(
                         `VANITY: Found an address after ${attempts.value} attempts!`
                     );
+                    addressPrefix.value = '';
+                    addressPrefixShow.value = false;
                 } finally {
                     // Stop search even if import fails
                     stop();
@@ -111,7 +131,7 @@ function generate() {
 </style>
 <template>
     <div class="col-12 col-lg-6 p-2">
-        <div class="h-100 dashboard-item dashboard-display">
+        <div class="h-100 w-100 dashboard-item dashboard-display">
             <div class="container">
                 <div class="coinstat-icon" v-html="fire"></div>
 
@@ -147,6 +167,13 @@ function generate() {
                     />
                 </Transition>
 
+                <br v-show="addressPrefixShow" />
+                <div v-show="addressPrefixShow" id="matchCaseDiv" class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="check_matchCase" ref="matchCaseElement" />
+                    <label class="form-check-label noselect" for="check_matchCase">Match Case</label>
+                </div>
+                <br v-show="addressPrefixShow" />
+
                 <button
                     class="pivx-button-big"
                     @click="isGenerating ? stop() : generate()"
@@ -165,7 +192,14 @@ function generate() {
                         </span>
                     </span>
                 </button>
+
             </div>
         </div>
     </div>
 </template>
+
+<style>
+#matchCaseDiv {
+  margin-top: 8px;
+}
+</style>

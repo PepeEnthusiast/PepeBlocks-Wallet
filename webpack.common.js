@@ -134,7 +134,7 @@ export default {
             patterns: [
                 { from: 'manifest.json' },
                 { from: 'assets/icons' },
-                { from: 'assets/logo_opaque-dark-bg.png' },
+                //{ from: 'assets/logo_opaque-dark-bg.png' },
                 { from: 'scripts/native-worker.js' },
             ],
         }),

@@ -166,7 +166,7 @@ async function selectContact() {
                                     {{ translation.sendAmountCoinsMax }}
                                 </div>
                             </span>
-                            <span class="input-group-text">PIVX</span>
+                            <span class="input-group-text">PEPE</span>
                         </div>
                     </div>
                 </div>

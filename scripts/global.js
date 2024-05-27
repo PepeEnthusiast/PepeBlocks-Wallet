@@ -425,18 +425,13 @@ async function loadImages() {
     [
         ['mpw-main-logo', import('../assets/pepecoin.png')], 
         ['github-32', import('../assets/github-32.png')], 
-        ['x-32', import('../assets/x-32.png')], 
-        ['telegram-32', import('../assets/telegram-32.png')], 
+        //['x-32', import('../assets/x-32.png')], 
+        //['telegram-32', import('../assets/telegram-32.png')], 
         ['discord-32', import('../assets/discord-32.png')], 
-        ['pepeguild-32', import('../assets/pepeguild-32.png')], 
+        //['pepeguild-32', import('../assets/pepeguild-32.png')], 
         ['pepecoinlogo-32', import('../assets/pepecoinlogo-32.png')], 
-        ['miningpoolstats-32', import('../assets/miningpoolstats-32.png')], 
-        ['coingecko-32', import('../assets/coingecko-32.png')], 
-        ['github-32', import('../assets/github-32.png')], 
-        ['github-32', import('../assets/github-32.png')], 
-        ['github-32', import('../assets/github-32.png')], 
-        ['github-32', import('../assets/github-32.png')], 
-        ['github-32', import('../assets/github-32.png')]
+        //['miningpoolstats-32', import('../assets/miningpoolstats-32.png')], 
+        //['coingecko-32', import('../assets/coingecko-32.png')],
     ];
 
     const promises = images.map(([id, path]) =>

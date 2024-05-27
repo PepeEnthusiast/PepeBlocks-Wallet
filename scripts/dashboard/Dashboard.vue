@@ -1195,30 +1195,32 @@ if (wallet.isViewOnly && !wallet.isHardwareWallet) {
       </div>
       <div class="modal-body p-2">
         <p style="color: #fff"><b>Please confirm the transaction details:</b></p>
-        <table class="table table-bordered m-0 p-0">
-          <tbody>
-            <tr>
-              <th scope="row">From:</th>
-              <td>{{ txSender }}</td>
-            </tr>
-            <tr>
-              <th scope="row">To:</th>
-              <td>{{ txDestination }}</td>
-            </tr>
-            <tr>
-              <th scope="row">Amount:</th>
-              <td>{{ txAmount }}</td>
-            </tr>
-            <tr>
-              <th scope="row">*Fees:</th>
-              <td>{{ txFee / 100000000 }} PEPE ({{ txRibbitPerByte }} ribbits/Byte)</td>
-            </tr>
-            <tr>
-              <th scope="row">TX Size:</th>
-              <td>{{ txSize }} Byte</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered m-0 p-0">
+            <tbody style="font-size: 12px">
+                <tr>
+                <th scope="row">From:</th>
+                <td>{{ txSender }}</td>
+                </tr>
+                <tr>
+                <th scope="row">To:</th>
+                <td>{{ txDestination }}</td>
+                </tr>
+                <tr>
+                <th scope="row">Amount:</th>
+                <td>{{ txAmount }}</td>
+                </tr>
+                <tr>
+                <th scope="row">TX Size:</th>
+                <td>{{ txSize }} Byte</td>
+                </tr>
+                <tr>
+                <th scope="row">*Fees:</th>
+                <td>{{ txFee / 100000000 }} PEPE ({{ txRibbitPerByte }} ribbits/Byte)</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
         <p style="color: #fff; font-size: 12px" class="m-1 p-0"><u>*Fees are deducted from your balance. The recipient receive the amount specified.*</u></p>
       </div>
       <div class="modal-footer m-0 p-0" hidden="">
@@ -1241,25 +1243,3 @@ if (wallet.isViewOnly && !wallet.isHardwareWallet) {
 
 
 </template>
-<style>
-    #sendConfirmationModal > div > div > div.modal-body > table
-    {
-        border: 1px solid #222222c7;
-    }
-    #sendConfirmationModal > div > div > div.modal-body > table > tbody > tr
-    {
-        border-color: #222222c7;
-    }
-    #sendConfirmationModal > div > div > div.modal-body > table > tbody > tr > td
-    {
-        background-color: #444444c7;
-        border-color: #222222c7;
-        color: #000;
-    }
-    #sendConfirmationModal > div > div > div.modal-body > table > tbody > tr > th
-    {
-        background-color: #444444c7;
-        border-color: #222222c7;
-        color: #000;
-    }
-</style>

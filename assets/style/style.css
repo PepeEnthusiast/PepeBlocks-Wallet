@@ -2753,12 +2753,38 @@ select.form-control option {
     margin-bottom:12px;
 }
 
-.settingsContent hr {
-    background-color: hsla(0, 0%, 27%, 0.37);
-    margin-left: -17px;
-    margin-right: -17px;
-    margin-top: 11px;
+.table-responsive {
+    overflow-x: auto;
 }
+
+#sendConfirmationModal > div > div > div.modal-body > div > table {
+    border: 1px solid #22222244;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#sendConfirmationModal > div > div > div.modal-body > div > table > tbody > tr {
+    border-color: #22222244;
+}
+
+#sendConfirmationModal > div > div > div.modal-body > div > table > tbody > tr > td,
+#sendConfirmationModal > div > div > div.modal-body > div > table > tbody > tr > th {
+    background-color: #2d472c44; /* Darker green background */
+    border-color: #22222244;
+    color: #ffffff;
+    padding: 8px;
+}
+
+#sendConfirmationModal > div > div > div.modal-body > div > table > tbody > tr:nth-child(odd) > td,
+#sendConfirmationModal > div > div > div.modal-body > div > table > tbody > tr:nth-child(odd) > th {
+    background-color: #3e5c3d44; /* Slightly lighter green for alternating rows */
+}
+
+#sendConfirmationModal > div > div > div.modal-body > div > table > tbody > tr > th {
+    font-weight: bold;
+    text-align: left;
+}
+
 
 #keypair > div.v-mask > div > div.popupBody > div > div.row > div.col-7.pr-2 > div > div > span.input-group-text.p-0 > div
 {

@@ -158,7 +158,6 @@
     }
   });
   $(document).ready(function() {
-
     isDocumentReady = true;
 
     //if ('home' != '')
@@ -192,7 +191,23 @@
     update_block_and_connection_stats();
     fixFooterHeightAndPosition();
     enableTooltips();
+
+    checkAlert();
+    var interval = setInterval(function () {
+        checkAlert();
+    }, 1000);
   });
+</script>
+
+<script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', function (e) {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        //console.log('beforeinstallprompt')
+    });
 </script>
 
 
@@ -248,33 +263,11 @@
   });
 </script>
 
-
-
-
-
-
-
-
-
   </head>
-
   <body>
     <div id="page-container" class="home-hero">
       <div id="content-wrap">
         <!-- NAVBAR -->
-        
-        <!--<div class="alert alert-danger" role="alert">
-          <strong>Attention:</strong> PepeBlocks Wallet is currently in BETA. Please <strong>backup your private key immediately</strong>. We highly recommend importing your private key into the official wallet to ensure uninterrupted access to your funds in case this website becomes unavailable.
-        </div>-->
-
-
-
-        <!--<div id="alertBox" class="alert alert-danger" style="display: none;" role="alert">
-          <strong>Important Notice:</strong> PepeBlocks Wallet is currently in BETA. Please <strong>backup your private key immediately</strong>.<br/><br/>We highly recommend importing your private key into the official wallet to ensure uninterrupted access to your funds in case this website becomes unavailable.
-          <br/><br/>
-          <button id="understandButton" class="btn btn-primary">I've Secured My Private Key</button>
-        </div>-->
-
         <div id="alertBox" class="alert alert-danger" style="display: none;" role="alert">
           <strong>Important Notice:</strong> PepeBlocks Wallet is currently in BETA. Please <strong>backup your private key immediately</strong>.
           <br/><br/>We <strong>highly recommend</strong> importing your private key into the official wallet to ensure uninterrupted access to your funds in case this website becomes unavailable.
@@ -308,16 +301,13 @@
             <u style="color: #fff;">Please confirm that you understand the following:</u>
           </li><br>
           <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-            • PepeBlocks Wallet is currently in BETA.
-          </li>
-          <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
             • There's no way to recover your funds if you lose access to your private key.
           </li>
           <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
             • It's highly recommended to back up your private key and import it into the official Pepecoin Core Wallet using the provided instructions.
           </li>
           <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-            • Before transferring larger amounts, test the process by sending small amounts to your receiving address and verifying they are received on the blockchain.
+            • Before transferring larger amounts, test the process by sending small amounts to your receiving address and verifying they are received on both wallets.
           </li>
           <li style="background-color: #55883A; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
             • Never share your private key with anyone. If someone obtains it, they can access and steal your funds.
@@ -326,16 +316,15 @@
             • We are not responsible for any loss of funds due to failure to back up your private key or import it into the official wallet.
           </li>
         </ul>
-        <p style="color: #fff;">This message will not be displayed for 24 hours once confirmed.</p>
+        <center><p class="important" style="font-size:14px; color: #ff0000; background-color: #000"><b><u>This message will not be displayed for 24 hours once confirmed.</u></b></p></center>
       </div>
       <div class="modal-footer" hidden="">
-        <button id="confirmButton" type="button" aria-label="Close" class="pivx-button-big" style="color: rgb(255, 255, 255); float: right; opacity: 0.8;">Confirm (30)</button>
+        <button id="confirmButton" type="button" aria-label="Close" class="pivx-button-big" style="color: rgb(255, 255, 255); float: right; opacity: 0.8;">Confirm (15)</button>
         <button id="cancelButton" type="button" aria-label="Close" class="pivx-button-big" style="color: rgb(255, 255, 255); float: right; opacity: 0.8;">Close</button>
       </div>
     </div>
   </div>
 </div>
-
 
 <script>
   document.getElementById('understandButton').addEventListener('click', function () {
@@ -408,22 +397,7 @@
       $('#confirmationModal').modal('hide');
       setCookie("betaAlertDismissed", "true", 24); // 24 hours cookies
   });
-
-  window.onload = function() {
-      var interval = setInterval(function () {
-        checkAlert();
-      }, 1000);
-  }
 </script>
-
-      
-
-
-
-
-
-
-
 
         <div class="navbar fixed-top bg-primary navbar-dark" id="main-header">
          <div class="navbar navbar-expand-lg" style="padding-left:0;">
@@ -472,7 +446,7 @@
                 <code id="ModalQRLabel" class="wallet-code"></code>
                 <div id="ModalQR" style="padding: 17px 10px 10px 10px;" class="auto-fit"></div>
                 <center>
-                  <div id="ModalQRReceiveTypeBtn" onclick="MPW.guiToggleReceiveType()" style="cursor: pointer; border: 0px; border-radius: 7px; padding: 6px 10px; margin: 0px 1px; background: linear-gradient(183deg, #9621ff9c, #7d21ffc7); color: #fff; font-weight: bold; width: fit-content; margin: 20px 0px;">
+                  <div id="ModalQRReceiveTypeBtn" onclick="MPW.guiToggleReceiveType()" style="cursor: pointer; border: 0px; border-radius: 7px; padding: 6px 10px; margin: 0px 1px; background: linear-gradient(183deg, #55883A, #55883A); color: #fff; font-weight: bold; width: fit-content; margin: 20px 0px;">
                     Change to Address
                   </div>
                 </center>
@@ -759,13 +733,13 @@
 
                       <div id="changePassword-container">
 
-                        <div id="changePasswordBtn" onclick="MPW.changePassword()" style="cursor: pointer; border: 0px; border-radius: 7px; padding: 6px 10px; margin: 0px 1px; background: linear-gradient(183deg, #9621ff9c, #7d21ffc7); color: #fff; font-weight: bold; width: fit-content; margin: 20px 0px;">
+                        <div id="changePasswordBtn" onclick="MPW.changePassword()" style="cursor: pointer; border: 0px; border-radius: 7px; padding: 6px 10px; margin: 0px 1px; background: linear-gradient(183deg, #55883A, #55883A); color: #fff; font-weight: bold; width: fit-content; margin: 20px 0px;">
                           Change Password
                         </div>
                         <hr>
                       </div>
                       <div id="logOut-container">
-                        <div onclick="MPW.logOut()" style="cursor: pointer; border: 0px; border-radius: 7px; padding: 6px 10px; margin: 0px 1px; background: linear-gradient(183deg, #9621ff9c, #7d21ffc7); color: #fff; font-weight: bold; width: fit-content; margin: 20px 0px;">
+                        <div onclick="MPW.logOut()" style="cursor: pointer; border: 0px; border-radius: 7px; padding: 6px 10px; margin: 0px 1px; background: linear-gradient(183deg, #55883A, #55883A); color: #fff; font-weight: bold; width: fit-content; margin: 20px 0px;">
                           Delete Wallet
                         </div>
                         <hr>

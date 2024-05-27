@@ -404,6 +404,10 @@ getEventEmitter().on('toggle-network', async () => {
     doms.domDashboard.click();
 });
 
+function betaAlertDismissed() {
+    return getCookie("betaAlertDismissed") === 'true'
+}
+
 onMounted(async () => {
     await start();
 
@@ -437,6 +441,10 @@ onMounted(async () => {
         }
     });
 
+    
+    var installWebAppButton = document.getElementById("installWebAppButton");
+    installWebAppButton.style.display = deferredPrompt === null || deferredPrompt === undefined ? 'none' : 'block';
+    //console.log(deferredPrompt);
 });
 
 const {
@@ -551,7 +559,7 @@ if (wallet.isViewOnly && !wallet.isHardwareWallet) {
     }
 }
 
-let timerStarted = false;
+    let timerStarted = false;
 
   // Function to start the timer
   function startTimer(duration) {
@@ -575,19 +583,117 @@ let timerStarted = false;
       }, 1000);
   }
 
+    var interval = setInterval(function () {
+        var installWebAppButton = document.getElementById("installWebAppButton");
+        installWebAppButton.style.display = deferredPrompt === null || deferredPrompt === undefined ? 'none' : 'block';
+    }, 1000);
 
+    function installApp() {
+        (async() => {
+            if (deferredPrompt !== null) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    deferredPrompt = null;
+                    installWebAppButton.style.display = 'none';
+                }
+            }
+        })()
+    }
+
+    document.getElementById("confirmButton").addEventListener("click", function() {
+        privKeyButton.style.display = 'none';
+    });
+
+    const emit = defineEmits(['send', 'exportPrivKeyOpen']);
+
+    function showExportPrivKeyModal() {
+        showExportModal.value = true;
+    }
 </script>
 
 <template>
     <div id="keypair" class="tabcontent m-0">
         <div class="m-0 p-0">
+
+            <!-- Install Web App -->
+            <div
+                id="installWebAppButton"
+                class="col-12 p-0"
+                v-show="!(deferredPrompt !== null)"
+            >
+                <center>
+                    <div
+                        class="dcWallet-warningMessage"
+                        @click="installApp()"
+                    >
+                        <div class="shieldLogo">
+                            <div class="shieldBackground">
+                                <span
+                                    class="dcWallet-svgIconPurple"
+                                    style="top: 14px; left: 7px"
+                                >
+                                    <i
+                                        class="fas fa-tablet-screen-button"
+                                        style="
+                                            position: relative;
+                                            left: 3px;
+                                            top: -5px;
+                                        "
+                                    ></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="lockUnlock">
+                            Install Web App
+                        </div>
+                    </div>
+                </center>
+            </div>
+            <!-- // Install Web App -->
+
+            
             <Login class="m-0 p-0"
                 v-show="!wallet.isImported"
                 :advancedMode="advancedMode"
                 @import-wallet="importWallet"
             />
-
            
+            <!-- View Private Key -->
+            <div
+                id="privKeyButton"
+                class="col-12 p-0"
+                v-if="wallet.isImported && !betaAlertDismissed()"
+            >
+                <center>
+                    <div
+                        class="dcWallet-warningMessage"
+                        @click="showExportPrivKeyModal()"
+                    >
+                        <div class="shieldLogo">
+                            <div class="shieldBackground">
+                                <span
+                                    class="dcWallet-svgIconPurple"
+                                    style="top: 14px; left: 7px"
+                                >
+                                    <i
+                                        class="fas fa-key"
+                                        style="
+                                            position: relative;
+                                            left: 3px;
+                                            top: -5px;
+                                        "
+                                    ></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="lockUnlock">
+                            View Private Key
+                        </div>
+                    </div>
+                </center>
+            </div>
+            <!-- // View Private Key -->
 
             <!-- Unlock wallet -->
             <div
@@ -628,7 +734,7 @@ let timerStarted = false;
 
             <!-- Lock wallet -->
             <div
-                class="col-12"
+                class="col-12 p-0"
                 v-if="
                     !wallet.isViewOnly && !needsToEncrypt && wallet.isImported
                 "

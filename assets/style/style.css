@@ -2711,7 +2711,6 @@ select.form-control option {
 }
 
 .settingsMenu {
-    background-color:hsla(0, 0%, 10%, 0.14);
     border-radius:9px;
     padding-left: 0;
     margin-bottom: 0;
@@ -2725,17 +2724,16 @@ select.form-control option {
     padding-top: 9px;
     padding-bottom: 9px;
     transition: all 0.125s ease-in-out;
+    background-color:#333;
 }
 
 .settingsMenu li:hover {
-    background-color:hsla(0, 0%, 25%, 0.35);
     cursor:pointer;
-    color:#fff!important;
 }
 
 .settingsMenu .active {
-    color:hsl(272 62% 81% / 1)!important;
-    background-color: hsla(0, 0%, 26%, 0.19);
+    color:#fff!important;
+    background-color: #55883A;
 }
 
 .settingsContent {
@@ -2762,6 +2760,11 @@ select.form-control option {
     margin-top: 11px;
 }
 
+#keypair > div.v-mask > div > div.popupBody > div > div.row > div.col-7.pr-2 > div > div > span.input-group-text.p-0 > div
+{
+    background: #c00000!important;
+}
+
 .custom-switch {
     padding-left: 55px;
 }
@@ -2778,6 +2781,7 @@ select.form-control option {
 
 .custom-switch .custom-control-label::before {
     height: 22px;
+    background-color: #ff0000;
 }
 
 .custom-switch .custom-control-label::after {
@@ -2793,8 +2797,8 @@ select.form-control option {
 
 .custom-control-input:checked~.custom-control-label::before {
     color: #fff;
-    border-color: #4d4d4d;
-    background-color: #444444;
+    border-color: #444444;
+    background-color: #55883A;
 }
 
 .custom-control-input:focus:not(:checked)~.custom-control-label::before {
@@ -3308,6 +3312,7 @@ select.form-control option {
     border-radius: 7.5px;
     border-color: rgba(255, 255, 255, 0%);
     background: rgba(255, 255, 255, 22%);
+    color: #fff;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
@@ -3320,7 +3325,7 @@ select.form-control option {
     width: 25px;
     height: 25px;
     border-radius: 50%; 
-    background: #474747;
+    background: #55883A;
     cursor: pointer;
 }
 

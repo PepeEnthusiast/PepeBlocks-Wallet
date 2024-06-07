@@ -16,7 +16,7 @@
         "MASTERNODE_PORT": 51472,
         "SHIELD_PREFIX": "ps",
         "Explorers": [
-            { "name": "PepeBlocks (Blockbook)", "url": "https://trezor.pepeblocks.com" }
+            { "name": "PepeBlocks (Blockbook)", "url": "https://blockbook.pepeblocks.com" }
         ],
         "Nodes": [
             { "name": "None", "url": "https://none.com" }
